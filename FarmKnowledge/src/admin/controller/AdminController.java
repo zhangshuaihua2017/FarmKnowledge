@@ -1,14 +1,13 @@
 package admin.controller;
 
-import com.jfinal.core.ActionKey;
 import com.jfinal.core.Controller;
-import com.jfinal.kit.PathKit;
 
 import admin.service.AdminService;
 import model.Admin;
 
 public class AdminController extends Controller{
 
+	//Ìø×ªµ½µÇÂ¼Ò³Ãæ
 	public void index() {
 		renderJsp("/login.jsp");
 	}
@@ -23,7 +22,6 @@ public class AdminController extends Controller{
 			Admin admin = service.loginAdmin(uName, password);
 			if(admin != null) {
 				setSessionAttr("admin",admin);
-				setSessionAttr("test", "test");
 				forwardAction("/admin/gotoIndex");
 			}else {
 				renderText("fail");

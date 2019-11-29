@@ -8,27 +8,30 @@
 	<title>知识农场后台管理系统</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="./css/font.css">
-	<link rel="stylesheet" href="./css/xadmin.css">
+    <link rel="stylesheet" href="${ctx}/css/font.css">
+	<link rel="stylesheet" href="${ctx}/css/xadmin.css">
     <link rel="stylesheet" href="https://cdn.bootcss.com/Swiper/3.4.2/css/swiper.min.css">
     <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.bootcss.com/Swiper/3.4.2/js/swiper.jquery.min.js"></script>
-    <!-- <script src="./lib/layui/layui.js" charset="utf-8"></script> -->
-    <!-- <script type="text/javascript" src="./js/xadmin.js"></script>-->
+    <script src="./lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/xadmin.js"></script>
     <script>
     	function adminLogin(){
     		var uName = $("#uName").val();
     		var password = $("#password").val();
-    		
-    		$.post("${ctx}/admin/login",{"uName":uName,"password":password},function(data){
-    			if(data == "fail"){
-    				alert('账号或密码错误');
-    			}else if(data == "notExist"){
-    				alert('管理员账号不存在');
-    			}else{
-    				window.location.href="http://localhost:8080/FarmKnowledge/index.jsp";
-    			}
-    		}) 
+    		if(uName == "" || password == ""){
+    			alert('输入框不能为空');
+    		}else{
+	    		$.post("${ctx}/admin/login",{"uName":uName,"password":password},function(data){
+	    			if(data == "fail"){
+	    				alert('账号或密码错误');
+	    			}else if(data == "notExist"){
+	    				alert('管理员账号不存在');
+	    			}else{
+	    				window.location.href="http://localhost:8080/FarmKnowledge/index.jsp";
+	    			}
+	    		}) 
+    		}
     	}
     </script>
 </head>
@@ -57,25 +60,6 @@
             </div>
         </form>
     </div>
-	<div class="bg-changer">
-        <div class="swiper-container changer-list">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide"><img class="item" src="./images/a.jpg" alt=""></div>
-                <div class="swiper-slide"><img class="item" src="./images/b.jpg" alt=""></div>
-                <div class="swiper-slide"><img class="item" src="./images/c.jpg" alt=""></div>
-                <div class="swiper-slide"><img class="item" src="./images/d.jpg" alt=""></div>
-                <div class="swiper-slide"><img class="item" src="./images/e.jpg" alt=""></div>
-                <div class="swiper-slide"><img class="item" src="./images/f.jpg" alt=""></div>
-                <div class="swiper-slide"><img class="item" src="./images/g.jpg" alt=""></div>
-                <div class="swiper-slide"><img class="item" src="./images/h.jpg" alt=""></div>
-                <div class="swiper-slide"><img class="item" src="./images/i.jpg" alt=""></div>
-                <div class="swiper-slide"><img class="item" src="./images/j.jpg" alt=""></div>
-                <div class="swiper-slide"><img class="item" src="./images/k.jpg" alt=""></div>
-                <div class="swiper-slide"><span class="reset">初始化</span></div>
-            </div>
-        </div>
-        <div class="bg-out"></div>
-        <div id="changer-set"><i class="iconfont">&#xe696;</i></div>   
-    </div>
+	<%@ include file="/layout/background.jsp"%>
 </body>
 </html>

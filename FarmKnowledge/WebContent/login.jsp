@@ -15,14 +15,15 @@
     <script type="text/javascript" src="https://cdn.bootcss.com/Swiper/3.4.2/js/swiper.jquery.min.js"></script>
     <script src="./lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="./js/xadmin.js"></script>
+    
     <script>
     	function adminLogin(){
-    		var uName = $("#uName").val();
+    		var accout = $("#accout").val();
     		var password = $("#password").val();
-    		if(uName == "" || password == ""){
+    		if(accout == "" || password == ""){
     			alert('输入框不能为空');
     		}else{
-	    		$.post("${ctx}/admin/login",{"uName":uName,"password":password},function(data){
+	    		$.post("${ctx}/admin/login",{"accout":accout,"password":password},function(data){
 	    			if(data == "fail"){
 	    				alert('账号或密码错误');
 	    			}else if(data == "notExist"){
@@ -44,7 +45,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label login-form"><i class="iconfont">&#xe6b8;</i></label>
                 <div class="layui-input-inline login-inline">
-                  <input id="uName" type="text" name="username" lay-verify="required" placeholder="请输入管理员账号" autocomplete="off" class="layui-input">
+                  <input id="accout" type="text" name="username" lay-verify="required" placeholder="请输入管理员账号" autocomplete="off" class="layui-input">
                   <c:set var="uName" value="" />
                 </div>
             </div>

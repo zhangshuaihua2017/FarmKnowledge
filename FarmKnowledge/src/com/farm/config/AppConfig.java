@@ -3,6 +3,7 @@ package com.farm.config;
 import com.farm.config.routes.AdminRoutes;
 import com.farm.config.routes.FrontRoutes;
 import com.farm.model.Admin;
+import com.farm.model.Crop;
 import com.farm.model.User;
 import com.farm.model.UserAuthority;
 import com.jfinal.config.Constants;
@@ -60,6 +61,7 @@ public class AppConfig extends JFinalConfig {
 		arp.addMapping("user", User.class);
 		arp.addMapping("userAuthority", UserAuthority.class);
 		arp.addMapping("admin", Admin.class);
+		arp.addMapping("crop", Crop.class);
 	}
 
 	@Override

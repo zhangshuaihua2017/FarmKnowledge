@@ -8,13 +8,21 @@
     <title>知识农场后台管理系统</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="./css/font.css">
-    <link rel="stylesheet" href="./css/xadmin.css">
+    <link rel="stylesheet" href="${ctx}/css/font.css">
+    <link rel="stylesheet" href="${ctx}/css/xadmin.css">
     <link rel="stylesheet" href="https://cdn.bootcss.com/Swiper/3.4.2/css/swiper.min.css">
     <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.bootcss.com/Swiper/3.4.2/js/swiper.jquery.min.js"></script>
-    <script src="./lib/layui/layui.js" charset="utf-8"></script>
-    <script type="text/javascript" src="./js/xadmin.js"></script>
+    <script src="${ctx}/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="${ctx}/js/xadmin.js"></script>
+
+	<script>
+		//初始化左侧菜单（管理员管理）
+		window.onload = function(){
+			document.getElementById('initAdminManager').setAttribute("class","sub-menu opened");
+			document.getElementById('initAdminManager2').setAttribute("class","current");
+		}
+    </script>
 
 </head>
 <body>
@@ -34,7 +42,7 @@
                 <div class="layui-form-pane" style="text-align: center;">
                   <div class="layui-form-item" style="display: inline-block;">
                     <div class="layui-input-inline">
-                      <input type="text" name="username"  placeholder="请输入管理员账号" autocomplete="off" class="layui-input">
+                      <input type="text" name="username" placeholder="请输入管理员账号" autocomplete="off" class="layui-input">
                     </div>
                     <div class="layui-input-inline" style="width:80px">
                         <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
@@ -47,6 +55,7 @@
                 <thead >
                     <tr>
                         <th></th>
+                        <th style="text-align:center;">管理员ID</th>
                         <th style="text-align:center;">管理员账号</th>
                         <th style="text-align:center;">密码</th>
                         <th style="text-align:center;">状态</th>
@@ -56,9 +65,12 @@
                 <tbody align="center">
                     <tr>
                         <td><input type="checkbox" value="1" name=""></td>
+                        <td>1</td>
                         <td>admin</td>
                         <td>admin</td>
-                        <td class="td-status"><span class="layui-btn layui-btn-danger layui-btn-mini">已删除</span></td>
+                        <td class="td-status">
+                        	<span class="layui-btn layui-btn-danger layui-btn-mini">已删除</span>
+                        </td>
                         <td class="td-manage" align="center">
                             <a style="text-decoration:none" onclick="member_recover(this,'10001')" href="javascript:;" title="恢复">
                                 <i class="layui-icon">&#xe618;</i>
@@ -71,6 +83,7 @@
                     </tr>
                     <tr>
                         <td><input type="checkbox" value="1" name=""></td>
+                        <td>2</td>
                         <td>zsh</td>
                         <td>123</td>
                         <td class="td-status"><span class="layui-btn layui-btn-danger layui-btn-mini">已删除</span></td>

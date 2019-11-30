@@ -3,6 +3,7 @@ package com.farm.admin.controller;
 import com.farm.admin.service.AdminService;
 import com.farm.model.Admin;
 import com.jfinal.core.Controller;
+import com.jfinal.plugin.activerecord.Page;
 
 public class AdminController extends Controller{
 	
@@ -13,12 +14,12 @@ public class AdminController extends Controller{
 	
 	//管理员登陆
 	public void login() {
-		String uName = get("uName");
+		String accout = get("accout");
 		String password = get("password");
 		AdminService service = new AdminService();
-		boolean isExist = service.isExistAdmin(uName);
+		boolean isExist = service.isExistAdmin(accout);
 		if(isExist) {
-			Admin admin = service.loginAdmin(uName, password);
+			Admin admin = service.loginAdmin(accout, password);
 			if(admin != null) {
 				setSessionAttr("admin",admin);
 				forwardAction("/admin/gotoIndex");
@@ -28,6 +29,31 @@ public class AdminController extends Controller{
 		}else {
 			renderText("notExist");
 		}
+	}
+	
+	//查询Admin表内所有管理员信息（Admin表），跳转到管理员列表页面，
+	public void findAdminPage() {
+		String accout = get("accout");
+		String page = get("currentPage");
+		String count = get("pageSize");
+		int exist = getInt("exist");
+		int currentPage;
+		int everyCount;
+		
+		if(page == null) {
+			currentPage = 1;
+		}else {
+			currentPage = Integer.parseInt(page);
+		}
+		if(count == null) {
+			everyCount = 1;
+		}else {
+			everyCount = Integer.parseInt(count);
+		}
+		
+		Page<Admin> list = new AdminService().findAdminPage(currentPage,everyCount,accout,exist);
+		setAttr("adminPage", list);
+		renderJsp("/admin-list.jsp");
 	}
 	
 }

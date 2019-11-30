@@ -27,9 +27,4 @@ public class UserController extends Controller{
 		}
 	}
 	
-	//查询所有用户列表
-	public void findAllUser() {
-		
-	}
-	
 }

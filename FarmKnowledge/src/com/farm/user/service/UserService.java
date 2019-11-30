@@ -6,6 +6,7 @@ import com.farm.model.User;
 import com.farm.user.dao.UserDao;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
+import com.jfinal.plugin.activerecord.Page;
 
 public class UserService {
 	
@@ -42,4 +43,10 @@ public class UserService {
 	public boolean isExistUser(String openId){
         return new UserDao().isExistUser(openId);
     }
+
+	//查询User表内用户信息（User表）
+	public Page<User> findUserPage(int currentPage,int everyCount,String accout,int exist) {
+		return new UserDao().findUserPage(currentPage,everyCount,accout,exist);
+	}
+	
 }

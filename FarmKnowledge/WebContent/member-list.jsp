@@ -8,14 +8,29 @@
     <title>知识农场后台管理系统</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="./css/font.css">
-    <link rel="stylesheet" href="./css/xadmin.css">
+    <link rel="stylesheet" href="${ctx}/css/font.css">
+    <link rel="stylesheet" href="${ctx}/css/xadmin.css">
     <link rel="stylesheet" href="https://cdn.bootcss.com/Swiper/3.4.2/css/swiper.min.css">
     <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.bootcss.com/Swiper/3.4.2/js/swiper.jquery.min.js"></script>
-    <script src="./lib/layui/layui.js" charset="utf-8"></script>
-    <script type="text/javascript" src="./js/xadmin.js"></script>
-
+    <script src="${ctx}/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="${ctx}/js/xadmin.js"></script>
+    
+    <style>
+    	.page{
+    		margin-right:25px;
+    	}
+    </style>
+    
+    <script>
+		//初始化左侧菜单（用户管理）
+		window.onload = function(){
+			document.getElementById('initUserManager').setAttribute("class","sub-menu opened");
+			document.getElementById('initUserManager1').setAttribute("class","current");
+		}
+		
+    </script>
+   
 </head>
 <body>
     <!-- 顶部开始 -->
@@ -30,11 +45,12 @@
         <div class="page-content">
           <div class="content">
             <!-- 右侧内容框架，更改从这里开始 -->
-            <form class="layui-form xbs" action="">
+            <form class="layui-form xbs" action="${ctx}/admin_user/findUserPage">
                 <div class="layui-form-pane" style="text-align: center;">
                   <div class="layui-form-item" style="display: inline-block;">
                     <div class="layui-input-inline">
-                      <input type="text" name="username"  placeholder="请输入账号" autocomplete="off" class="layui-input">
+                      <input type="text" name="accout" placeholder="请输入账号" autocomplete="off" class="layui-input" value="${param.accout}">
+                      <input type="hidden" name="exist" value="1"/>
                     </div>
                     <div class="layui-input-inline" style="width:80px">
                         <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
@@ -42,7 +58,13 @@
                   </div>
                 </div> 
             </form>
-            <xblock><button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon">&#xe640;</i>批量删除</button><button class="layui-btn" onclick="member_add('添加用户','member-add.html','600','500')"><i class="layui-icon">&#xe608;</i>添加</button><span class="x-right" style="line-height:40px">共有数据：88 条</span></xblock>
+            <xblock>
+            	<button class="layui-btn layui-btn-danger" onclick="delAll()">
+            		<i class="layui-icon">&#xe640;</i>批量删除
+            	</button>
+            	<button class="layui-btn" onclick="member_add('添加用户','member-add.html','600','500')">
+            		<i class="layui-icon">&#xe608;</i>添加
+            	</button><span class="x-right" style="line-height:40px">共有数据：${userPage.totalRow} 条</span></xblock>
             <table class="layui-table">
                 <thead >
                     <tr>
@@ -62,34 +84,70 @@
                     </tr>
                 </thead>
                 <tbody align="center">
-                    <tr>
-                        <td><input type="checkbox" value="1" name=""></td>
-                        <td>1</td>
-                        <td>yangxitao</td>
-                        <td>123</td>
-                        <td>zsh</td>
-                        <td><img style="width:50px;height:50px" src="https://zhangshuaihua2017.github.io/lianxi/picture/yxt.jpg" /></td>
-                        <td>1</td>
-                        <td>0</td>
-                        <td>1</td>
-                        <td>1</td>
-                        <td>在线</td>
-                        <td class="td-status"><span class="layui-btn layui-btn-normal layui-btn-mini">存在</span></td>
-                        <td class="td-manage" align="center">
-                            <a style="text-decoration:none"  onclick="member_password('修改','member-password.html','10001','600','400')"
-                            href="javascript:;" title="修改">
-                                <i class="layui-icon">&#xe631;</i>
-                            </a>
-                            <a title="删除" href="javascript:;" onclick="member_del(this,'1')" 
-                            style="text-decoration:none">
-                                <i class="layui-icon">&#xe640;</i>
-                            </a>
-                        </td>
-                    </tr>
+                	<c:forEach var="userPage" items="${userPage.list}">
+	                    <tr>
+	                        <td><input type="checkbox" value="1" name=""></td>
+	                        <td>${userPage.userId}</td>
+	                        <td>${userPage.accout}</td>
+	                        <td>${userPage.password}</td>
+	                        <td>${userPage.nickName}</td>
+	                        <td><img style="width:50px;height:50px" src="${userPage.photo}" /></td>
+	                        <td>${userPage.level}</td>
+	                        <td>${userPage.experience}</td>
+	                        <td>${userPage.grade}</td>
+	                        <td>${userPage.money}</td>
+	                        <td>
+	                        	<c:if test="${userPage.online == 1}">
+	                        		在线
+	                        	</c:if>
+		                        <c:if test="${userPage.online != 1}">
+		                        	离线
+		                        </c:if>
+	                        </td>
+	                        <td class="td-status">
+	                        	<span class="layui-btn layui-btn-normal layui-btn-mini">存在</span>
+	                        </td>
+	                        <td class="td-manage" align="center">
+	                            <a style="text-decoration:none"  onclick="member_password('修改','member-password.html','10001','600','400')"
+	                            href="javascript:;" title="修改">
+	                                <i class="layui-icon">&#xe631;</i>
+	                            </a>
+	                            <a title="删除" href="javascript:;" onclick="member_del(this,'1')" 
+	                            style="text-decoration:none">
+	                                <i class="layui-icon">&#xe640;</i>
+	                            </a>
+	                        </td>
+	                    </tr>
+                    </c:forEach>
                 </tbody>
             </table>
             <!-- 右侧内容框架，更改从这里结束 -->
           </div>
+          <!-- 分页处理开始 -->
+          <c:if test="${userPage.pageNumber-1 > 0}">
+    		<c:set var="prePage" value="${userPage.pageNumber-1}"></c:set>
+		  </c:if>
+		  <c:if test="${userPage.pageNumber-1 <= 0}">
+		   	<c:set var="prePage" value="1"></c:set>
+		  </c:if>
+		  <c:if test="${userPage.pageNumber+1 <= userPage.totalPage}">
+		    <c:set var="nextPage" value="${userPage.pageNumber+1}"></c:set>
+		  </c:if>
+		  <c:if test="${userPage.pageNumber+1 > userPage.totalPage}">
+		    <c:set var="nextPage" value="${userPage.totalPage}"></c:set>
+		  </c:if>
+		  <div align="center">
+			<a  class="page" style="margin-left:25px;" href="${ctx}/admin_user/findUserPage?accout=${param.accout}&&currentPage=1&&pageSize=${userPage.pageSize}&&exist=1">首页</a>
+			<a  class="page" href="${ctx}/admin_user/findUserPage?accout=${param.accout}&&currentPage=${prePage}&&pageSize=${userPage.pageSize}&&exist=1">上一页</a>
+			<a  class="page" href="${ctx}/admin_user/findUserPage?accout=${param.accout}&&currentPage=${nextPage}&&pageSize=${userPage.pageSize}&&exist=1">下一页</a>
+			<a  class="page" href="${ctx}/admin_user/findUserPage?accout=${param.accout}&&currentPage=${userPage.totalPage}&&pageSize=${userPage.pageSize}&&exist=1">末页</a>			
+		  </div>
+		  <div align="center" style="margin-top:20px;">
+			<span style="margin-right:10px;">${userPage.pageNumber}</span>
+			<span>/</span>
+			<span style="margin-left:10px;">${userPage.totalPage}</span>
+		  </div>
+		  <!-- 分页处理结束 -->
         </div>
         <!-- 右侧主体结束 -->
     </div>
@@ -203,6 +261,7 @@
           var s = document.getElementsByTagName("script")[0]; 
           s.parentNode.insertBefore(hm, s);
         })();
-        </script>
+	</script>
+	
 </body>
 </html>

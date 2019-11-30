@@ -17,14 +17,14 @@
                         	用户管理
                         <i class="iconfont nav_right">&#xe697;</i>
                     </a>
-                    <ul class="sub-menu">
-                        <li>
-                            <a href="${ctx}/member-list.jsp">
+                    <ul id="initUserManager" class="sub-menu">
+                        <li id="initUserManager1">
+                            <a href="${ctx}/admin_user/findUserPage?exist=1">
                                 <i class="iconfont">&#xe6a7;</i>
                         	用户列表
                             </a>
                         </li>
-                        <li>
+                        <li id="initUserManager2">
                             <a href="${ctx}/member-del.jsp">
                                 <i class="iconfont">&#xe6a7;</i>
                         	用户删除
@@ -38,14 +38,14 @@
                         	作物管理
                         <i class="iconfont nav_right">&#xe697;</i>
                     </a>
-                    <ul class="sub-menu">
-                        <li>
-                            <a href="${ctx}/crop-list.jsp">
+                    <ul id="initCropManager" class="sub-menu">
+                        <li id="initCropManager1">
+                            <a href="${ctx}/admin_crop/findCropPage?exist=1">
                                 <i class="iconfont">&#xe6a7;</i>
                         	作物列表
                             </a>
                         </li>
-                        <li>
+                        <li id="initCropManager2">
                             <a href="${ctx}/crop-del.jsp">
                                 <i class="iconfont">&#xe6a7;</i>
                         	作物删除
@@ -59,14 +59,14 @@
                         	管理员管理
                         <i class="iconfont nav_right">&#xe697;</i>
                     </a>
-                    <ul class="sub-menu" style="display:none">
-                        <li>
-                            <a href="${ctx}/admin-list.jsp">
+                    <ul id="initAdminManager" class="sub-menu">
+                        <li id="initAdminManager1">
+                            <a href="${ctx}/admin/findAdminPage?exist=1">
                                 <i class="iconfont">&#xe6a7;</i>
                         	管理员列表
                             </a>
                         </li>
-                        <li>
+                        <li id="initAdminManager2">
                             <a href="${ctx}/admin-del.jsp">
                                 <i class="iconfont">&#xe6a7;</i>
                         	管理员删除

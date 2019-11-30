@@ -6,7 +6,7 @@
         <div class="open-nav"><i class="iconfont">&#xe699;</i></div>
         <ul class="layui-nav right" lay-filter="">
           <li class="layui-nav-item">
-            <a href="javascript:;">${admin.uName}</a>
+            <a href="javascript:;">${admin.accout}</a>
             <dl class="layui-nav-child">
               <dd><a href="${ctx}/login.jsp">退出</a></dd>
             </dl>

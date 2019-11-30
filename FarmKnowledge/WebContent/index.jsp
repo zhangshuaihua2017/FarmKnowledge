@@ -144,7 +144,6 @@
     </div>
     <!-- 中部结束 -->
     <!-- 底部开始 -->
-    	<%@ include file="/layout/footer.jsp"%>
     <!-- 底部结束 -->
     <!-- 背景切换开始 -->
 		<%@ include file="/layout/background.jsp"%>

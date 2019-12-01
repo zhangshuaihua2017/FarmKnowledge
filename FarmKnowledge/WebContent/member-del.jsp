@@ -16,6 +16,12 @@
     <script src="${ctx}/lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="${ctx}/js/xadmin.js"></script>
     
+    <style>
+    	.page{
+    		margin-right:25px;
+    	}
+    </style>
+    
     <script>
 		//初始化左侧菜单（用户管理）
 		window.onload = function(){
@@ -38,11 +44,12 @@
         <div class="page-content">
           <div class="content">
             <!-- 右侧内容框架，更改从这里开始 -->
-            <form class="layui-form xbs" action="">
+            <form class="layui-form xbs" action="${ctx}/admin_user/findUserPage">
                 <div class="layui-form-pane" style="text-align: center;">
                   <div class="layui-form-item" style="display: inline-block;">
                     <div class="layui-input-inline">
-                      <input type="text" name="username" placeholder="请输入账号" autocomplete="off" class="layui-input">
+                      <input type="text" name="accout" placeholder="请输入账号" autocomplete="off" class="layui-input">
+                      <input type="hidden" name="exist" value="0"/>
                     </div>
                     <div class="layui-input-inline" style="width:80px">
                         <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
@@ -50,7 +57,12 @@
                   </div>
                 </div> 
             </form>
-            <xblock><button class="layui-btn layui-btn-danger" onclick="recoverAll()"><i class="layui-icon">&#xe640;</i>批量恢复</button><span class="x-right" style="line-height:40px">共有数据：88 条</span></xblock>
+            <xblock>
+            	<button class="layui-btn layui-btn-danger" onclick="recoverAll()">
+            		<i class="layui-icon">&#xe640;</i>批量恢复
+            	</button>
+            	<span class="x-right" style="line-height:40px">共有数据：${userPage.totalRow} 条</span>
+            </xblock>
             <table class="layui-table">
                 <thead >
                     <tr>
@@ -64,39 +76,68 @@
                         <th style="text-align:center;">经验</th>
                         <th style="text-align:center;">年级</th>
                         <th style="text-align:center;">金币</th>
+                        <th style="text-align:center;">是否在线</th>
                         <th style="text-align:center;">状态</th>
                         <th style="text-align:center;">操作</th>
                     </tr>
                 </thead>
                 <tbody align="center">
-                    <tr>
-                        <td><input type="checkbox" value="1" name=""></td>
-                        <td>2</td>
-                        <td>sunyufei</td>
-                        <td>123</td>
-                        <td>zsh</td>
-                        <td><img style="width:50px;height:50px" src="https://zhangshuaihua2017.github.io/lianxi/picture/sf.JPG" /></td>
-                        <td>1</td>
-                        <td>0</td>
-                        <td>1</td>
-                        <td>1</td>
-                        <td class="td-status">
-                        	<span class="layui-btn layui-btn-danger layui-btn-mini">已删除</span>
-                        </td>
-                        <td class="td-manage" align="center">
-                            <a style="text-decoration:none" onclick="member_recover(this,'10001')" href="javascript:;" title="恢复">
-                                <i class="layui-icon">&#xe618;</i>
-                            </a>
-                            <a title="彻底删除" href="javascript:;" onclick="member_unset(this,'1')" 
-                            style="text-decoration:none">
-                                <i class="layui-icon">&#xe640;</i>
-                            </a>
-                        </td>
-                    </tr>
+                    <c:forEach var="userPage" items="${userPage.list}">
+	                    <tr>
+	                        <td><input type="checkbox" value="1" name=""></td>
+	                        <td>${userPage.userId}</td>
+	                        <td>${userPage.accout}</td>
+	                        <td>${userPage.password}</td>
+	                        <td>${userPage.nickName}</td>
+	                        <td><img style="width:50px;height:50px" src="${userPage.photo}" /></td>
+	                        <td>${userPage.level}</td>
+	                        <td>${userPage.experience}</td>
+	                        <td>${userPage.grade}</td>
+	                        <td>${userPage.money}</td>
+	                        <td>离线</td>
+	                        <td class="td-status">
+	                        	<span class="layui-btn layui-btn-danger layui-btn-mini">已删除</span>
+	                        </td>
+	                        <td class="td-manage" align="center">
+	                            <a style="text-decoration:none" onclick="member_recover(this,'10001')" href="javascript:;" title="恢复">
+	                                <i class="layui-icon">&#xe618;</i>
+	                            </a>
+	                            <a title="彻底删除" href="javascript:;" onclick="member_unset(this,'1')" 
+	                            style="text-decoration:none">
+	                                <i class="layui-icon">&#xe640;</i>
+	                            </a>
+	                        </td>
+                    	</tr>
+                    </c:forEach>
                 </tbody>
             </table>
             <!-- 右侧内容框架，更改从这里结束 -->
           </div>
+          <!-- 分页处理开始 -->
+          <c:if test="${userPage.pageNumber-1 > 0}">
+    		<c:set var="prePage" value="${userPage.pageNumber-1}"></c:set>
+		  </c:if>
+		  <c:if test="${userPage.pageNumber-1 <= 0}">
+		   	<c:set var="prePage" value="1"></c:set>
+		  </c:if>
+		  <c:if test="${userPage.pageNumber+1 <= userPage.totalPage}">
+		    <c:set var="nextPage" value="${userPage.pageNumber+1}"></c:set>
+		  </c:if>
+		  <c:if test="${userPage.pageNumber+1 > userPage.totalPage}">
+		    <c:set var="nextPage" value="${userPage.totalPage}"></c:set>
+		  </c:if>
+		  <div align="center">
+			<a  class="page" style="margin-left:25px;" href="${ctx}/admin_user/findUserPage?accout=${param.accout}&&currentPage=1&&pageSize=${userPage.pageSize}&&exist=0">首页</a>
+			<a  class="page" href="${ctx}/admin_user/findUserPage?accout=${param.accout}&&currentPage=${prePage}&&pageSize=${userPage.pageSize}&&exist=0">上一页</a>
+			<a  class="page" href="${ctx}/admin_user/findUserPage?accout=${param.accout}&&currentPage=${nextPage}&&pageSize=${userPage.pageSize}&&exist=0">下一页</a>
+			<a  class="page" href="${ctx}/admin_user/findUserPage?accout=${param.accout}&&currentPage=${userPage.totalPage}&&pageSize=${userPage.pageSize}&&exist=0">末页</a>			
+		  </div>
+		  <div align="center" style="margin-top:20px;">
+			<span style="margin-right:10px;">${userPage.pageNumber}</span>
+			<span>/</span>
+			<span style="margin-left:10px;">${userPage.totalPage}</span>
+		  </div>
+		  <!-- 分页处理结束 -->
         </div>
         <!-- 右侧主体结束 -->
     </div>

@@ -25,7 +25,7 @@
                             </a>
                         </li>
                         <li id="initUserManager2">
-                            <a href="${ctx}/member-del.jsp">
+                            <a href="${ctx}/admin_user/findUserPage?exist=0">
                                 <i class="iconfont">&#xe6a7;</i>
                         	用户删除
                             </a>

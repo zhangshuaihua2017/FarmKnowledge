@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50506
 File Encoding         : 65001
 
-Date: 2019-11-30 19:59:16
+Date: 2019-12-01 12:28:07
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -91,13 +91,14 @@ CREATE TABLE `user` (
   `land17` int(11) DEFAULT '0',
   `land18` int(11) DEFAULT '0',
   PRIMARY KEY (`userId`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('9', 'yangxitao', '123', 'yxt', 'https://zhangshuaihua2017.github.io/lianxi/picture/yxt.jpg', '1', '0', '1', '0', '1', '1', '1', '1', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
-INSERT INTO `user` VALUES ('10', 'jingguangdan', '123', 'jgd', 'https://zhangshuaihua2017.github.io/lianxi/picture/jgd.JPG', '1', '0', '1', '0', '1', '1', '1', '1', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
+INSERT INTO `user` VALUES ('9', '皮皮涛', '123', 'yxt', 'https://zhangshuaihua2017.github.io/lianxi/picture/yxt.jpg', '1', '0', '1', '0', '1', '1', '1', '1', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
+INSERT INTO `user` VALUES ('10', '皮皮天', '123', 'jgd', 'https://zhangshuaihua2017.github.io/lianxi/picture/jgd.JPG', '1', '0', '1', '0', '1', '1', '1', '1', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
+INSERT INTO `user` VALUES ('11', '傻飞', '123', 'syf', 'https://zhangshuaihua2017.github.io/lianxi/picture/sf.JPG', '1', '0', '1', '0', '1', '1', '1', '1', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
 
 -- ----------------------------
 -- Table structure for `userauthority`

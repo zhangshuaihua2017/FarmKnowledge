@@ -1,5 +1,7 @@
 package  com.farm.user.dao;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.List;
 
 import com.farm.model.User;
@@ -13,6 +15,8 @@ public class UserDao {
 	public User findUserByOpenId(String openId){
 		List<User> list = User.dao.find("select user.* from user,userAuthority where user.userId=userAuthority.userId and userAuthority.openId=?",openId);
 		if(list.size() != 0) {
+			User user = list.get(0);
+			user.set("photo", URLEncoder.encode(user.getStr("photo")));
 			return list.get(0);
 		}
 		return null;

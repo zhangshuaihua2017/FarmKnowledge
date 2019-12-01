@@ -53,7 +53,11 @@ public class AdminController extends Controller{
 		
 		Page<Admin> list = new AdminService().findAdminPage(currentPage,everyCount,accout,exist);
 		setAttr("adminPage", list);
-		renderJsp("/admin-list.jsp");
+		if(exist == 1) {
+			renderJsp("/admin-list.jsp");
+		}else {
+			renderJsp("/admin-del.jsp");
+		}
 	}
 	
 }

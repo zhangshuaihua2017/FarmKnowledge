@@ -22,14 +22,19 @@ public class UserController extends Controller{
 			currentPage = Integer.parseInt(page);
 		}
 		if(count == null) {
-			everyCount = 1;
+			everyCount = 2;
 		}else {
 			everyCount = Integer.parseInt(count);
 		}
 		
 		Page<User> list = new UserService().findUserPage(currentPage,everyCount,accout,exist);
 		setAttr("userPage", list);
-		renderJsp("/member-list.jsp");
+		if(exist == 1) {
+			renderJsp("/member-list.jsp");
+		}else {
+			renderJsp("/member-del.jsp");
+		}
+		
 	}
 
 }

@@ -29,7 +29,11 @@ public class CropController extends Controller{
 		
 		Page<Crop> list = new CropService().findCropPage(currentPage,everyCount,name,exist);
 		setAttr("cropPage", list);
-		renderJsp("/crop-list.jsp");
+		if(exist == 1) {
+			renderJsp("/crop-list.jsp");
+		}else {
+			renderJsp("/crop-del.jsp");
+		}
 	}
 	
 }

@@ -7,7 +7,7 @@ import com.jfinal.plugin.activerecord.Page;
 public class CropService {
 	
 	//查询Crop表内所有作物信息（Crop表）
-	public Page<Crop> findCropPage(int currentPage,int everyCount,String name,int exist) {
-		return new CropDao().findCropPage(currentPage,everyCount,name,exist);
+	public Page<Crop> findCropPage(int pageNumber,int everyCount,String name,int exist) {
+		return new CropDao().findCropPage(pageNumber,everyCount,name,exist);
 	}
 }

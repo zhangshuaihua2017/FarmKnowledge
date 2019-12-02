@@ -25,8 +25,8 @@
 	<script>
 		//初始化左侧菜单（管理员管理）
 		window.onload = function(){
-			document.getElementById('initAdminManager').setAttribute("class","sub-menu opened");
-			document.getElementById('initAdminManager1').setAttribute("class","current");
+			$("#initAdminManager").attr("class","sub-menu opened");
+			$("#initAdminManager1").attr("class","current");
 		}
     </script>
 
@@ -88,12 +88,10 @@
 	                        	<span class="layui-btn layui-btn-normal layui-btn-mini">存在</span>
 	                        </td>
 	                        <td class="td-manage" align="center">
-	                            <a style="text-decoration:none"  onclick="member_password('修改','member-password.html','10001','600','400')"
-	                            href="javascript:;" title="修改">
+	                            <a style="text-decoration:none"  onclick="member_password('修改','member-password.html','10001','600','400')" href="javascript:;" title="修改">
 	                                <i class="layui-icon">&#xe631;</i>
 	                            </a>
-	                            <a title="删除" href="javascript:;" onclick="member_del(this,'1')" 
-	                            style="text-decoration:none">
+	                            <a title="删除" href="javascript:;" onclick="member_del(this,'1')" style="text-decoration:none">
 	                                <i class="layui-icon">&#xe640;</i>
 	                            </a>
 	                        </td>
@@ -103,30 +101,58 @@
             </table>
             <!-- 右侧内容框架，更改从这里结束 -->
           </div>
-          <c:if test="${adminPage.pageNumber-1 > 0}">
-    		<c:set var="prePage" value="${adminPage.pageNumber-1}"></c:set>
-    	  </c:if>
-    	  <c:if test="${adminPage.pageNumber-1 <= 0}">
-    		<c:set var="prePage" value="1"></c:set>
-    	  </c:if>
-   	   	  <c:if test="${adminPage.pageNumber+1 <= adminPage.totalPage}">
-    		<c:set var="nextPage" value="${adminPage.pageNumber+1}"></c:set>
-    	  </c:if>
-    	  <c:if test="${adminPage.pageNumber+1 > adminPage.totalPage}">
-    		<c:set var="nextPage" value="${adminPage.totalPage}"></c:set>
-    	  </c:if>
-    	  <div align="center">
-			<a class="page" style="margin-left:25px;" href="${ctx}/admin/findAdminPage?accout=${param.accout}&&currentPage=1&&pageSize=${adminPage.pageSize}&&exist=1">首页</a>
-			<a class="page" href="${ctx}/admin/findAdminPage?accout=${param.accout}&&currentPage=${prePage}&&pageSize=${adminPage.pageSize}&&exist=1">上一页</a>
-			<a class="page" href="${ctx}/admin/findAdminPage?accout=${param.accout}&&currentPage=${nextPage}&&pageSize=${adminPage.pageSize}&&exist=1">下一页</a>
-			<a class="page" href="${ctx}/admin/findAdminPage?accout=${param.accout}&&currentPage=${adminPage.totalPage}&&pageSize=${adminPage.pageSize}&&exist=1">末页</a>			
-		  </div>
-		  <div align="center" style="margin-top:20px;">
-			<span style="margin-right:10px;">${adminPage.pageNumber}</span>
-			<span>/</span>
-			<span style="margin-left:10px;">${adminPage.totalPage}</span>
-		  </div>
-        </div>
+          <!-- 分页处理开始 -->
+          		<!-- 上一页 -->
+	          	<c:choose>
+	        		<c:when test="${adminPage.pageNumber-1 > 0}">
+	        			<c:set var="prePage" value="${adminPage.pageNumber-1}"></c:set>
+	        		</c:when>
+	        		<c:when test="${adminPage.pageNumber-1 <= 0}">
+	        			<c:set var="prePage" value="1"></c:set>
+	        		</c:when>
+	        	</c:choose>
+	        	<!-- 查询结果不为空 -->
+	          	<c:if test="${adminPage.totalPage != 0}">
+	          		<!-- 下一页 -->
+	          		<c:choose>
+	          			<c:when test="${adminPage.pageNumber+1 <= adminPage.totalPage}">
+	          				<c:set var="nextPage" value="${adminPage.pageNumber+1}"></c:set>
+	          			</c:when>
+	          			<c:when test="${adminPage.pageNumber+1 > adminPage.totalPage}">
+	          				<c:set var="nextPage" value="${adminPage.totalPage}"></c:set>
+	          			</c:when>
+	          		</c:choose>
+	          		<!-- 末页 -->
+	          		<c:set var="lastPage" value="${adminPage.totalPage}"></c:set>
+	          	</c:if>
+	          	<!-- 查询结果为空 -->
+	          	<c:if test="${adminPage.totalPage == 0}">
+	          		<!-- 下一页 -->
+	          		<c:set var="nextPage" value="1"></c:set>
+	          		<!-- 末页 -->
+	          		<c:set var="lastPage" value="1"></c:set>
+	          	</c:if>
+			  <div align="center">
+				<a  class="page" style="margin-left:25px;" href="${ctx}/admin/findAdminPage?accout=${param.accout}&&pageNumber=1&&pageSize=${adminPage.pageSize}&&exist=1">首页</a>
+				<a  class="page" href="${ctx}/admin/findAdminPage?accout=${param.accout}&&pageNumber=${prePage}&&pageSize=${adminPage.pageSize}&&exist=1">上一页</a>
+				<a  class="page" href="${ctx}/admin/findAdminPage?accout=${param.accout}&&pageNumber=${nextPage}&&pageSize=${adminPage.pageSize}&&exist=1">下一页</a>
+				<a  class="page" href="${ctx}/admin/findAdminPage?accout=${param.accout}&&pageNumber=${lastPage}&&pageSize=${adminPage.pageSize}&&exist=1">末页</a>			
+			  </div>
+			  <div align="center" style="margin-top:20px;">
+				<span style="margin-right:10px;">
+					<!-- 查询结果不为空 -->
+					<c:if test="${adminPage.totalPage != 0}">
+						${adminPage.pageNumber}
+					</c:if>
+					<!-- 查询结果为空 -->
+					<c:if test="${adminPage.totalPage == 0}">
+						0
+					</c:if>
+				</span>
+				<span>/</span>
+				<span style="margin-left:10px;">${adminPage.totalPage}</span>
+			  </div>
+		  <!-- 分页处理结束 -->
         <!-- 右侧主体结束 -->
     </div>
     <!-- 中部结束 -->

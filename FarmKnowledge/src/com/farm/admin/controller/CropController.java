@@ -7,19 +7,19 @@ import com.jfinal.plugin.activerecord.Page;
 
 public class CropController extends Controller{
 	
-	//查询Crop表内所有作物信息（Crop表），跳转到作物列表页面，
+	//查询Crop表内所有作物信息，跳转到作物列表页面（Crop表）
 	public void findCropPage() {
 		String name = get("name");
-		String page = get("currentPage");
+		String page = get("pageNumber");
 		String count = get("pageSize");
 		int exist = getInt("exist");
-		int currentPage;
+		int pageNumber;
 		int everyCount;
 		
 		if(page == null) {
-			currentPage = 1;
+			pageNumber = 1;
 		}else {
-			currentPage = Integer.parseInt(page);
+			pageNumber = Integer.parseInt(page);
 		}
 		if(count == null) {
 			everyCount = 1;
@@ -27,7 +27,7 @@ public class CropController extends Controller{
 			everyCount = Integer.parseInt(count);
 		}
 		
-		Page<Crop> list = new CropService().findCropPage(currentPage,everyCount,name,exist);
+		Page<Crop> list = new CropService().findCropPage(pageNumber,everyCount,name,exist);
 		setAttr("cropPage", list);
 		if(exist == 1) {
 			renderJsp("/crop-list.jsp");

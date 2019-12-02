@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50506
 File Encoding         : 65001
 
-Date: 2019-12-01 12:28:07
+Date: 2019-12-02 08:53:00
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -38,7 +38,7 @@ INSERT INTO `admin` VALUES ('2', 'zsh', '123', '1');
 -- ----------------------------
 DROP TABLE IF EXISTS `crop`;
 CREATE TABLE `crop` (
-  `cropId` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) DEFAULT NULL,
   `price` int(11) DEFAULT NULL,
   `img1` varchar(150) DEFAULT NULL,
@@ -48,7 +48,7 @@ CREATE TABLE `crop` (
   `value` int(11) DEFAULT NULL,
   `experience` int(11) DEFAULT NULL,
   `exist` int(11) DEFAULT '1',
-  PRIMARY KEY (`cropId`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -61,15 +61,15 @@ INSERT INTO `crop` VALUES ('1', '玫瑰花', '100', 'https://ss1.bdstatic.com/70
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
-  `userId` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `accout` varchar(100) DEFAULT NULL,
   `password` varchar(100) DEFAULT NULL,
   `nickName` varchar(100) DEFAULT NULL,
   `photo` varchar(150) DEFAULT NULL,
   `level` int(11) DEFAULT '1',
-  `experience` int(11) DEFAULT '0',
+  `experience` bigint(11) DEFAULT '0',
   `grade` int(11) DEFAULT '1',
-  `money` int(11) DEFAULT '0',
+  `money` bigint(11) DEFAULT '0',
   `online` int(11) DEFAULT '1',
   `exist` int(11) DEFAULT '1',
   `land1` int(11) DEFAULT '1',
@@ -90,7 +90,7 @@ CREATE TABLE `user` (
   `land16` int(11) DEFAULT '0',
   `land17` int(11) DEFAULT '0',
   `land18` int(11) DEFAULT '0',
-  PRIMARY KEY (`userId`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -122,11 +122,11 @@ INSERT INTO `userauthority` VALUES ('10', '9', 'zxc', 'QQ');
 -- ----------------------------
 DROP TABLE IF EXISTS `userbag`;
 CREATE TABLE `userbag` (
-  `bagItemId` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `useId` int(11) DEFAULT NULL,
   `cropId` int(11) DEFAULT NULL,
   `number` int(11) DEFAULT NULL,
-  PRIMARY KEY (`bagItemId`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -138,12 +138,12 @@ CREATE TABLE `userbag` (
 -- ----------------------------
 DROP TABLE IF EXISTS `usercrop`;
 CREATE TABLE `usercrop` (
-  `cropItemId` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `userId` int(11) DEFAULT NULL,
   `cropId` int(11) DEFAULT NULL,
   `status` int(11) DEFAULT NULL,
   `progress` double DEFAULT NULL,
-  PRIMARY KEY (`cropItemId`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------

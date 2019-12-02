@@ -25,9 +25,44 @@
     <script>
 		//初始化左侧菜单（用户管理）
 		window.onload = function(){
-			document.getElementById('initUserManager').setAttribute("class","sub-menu opened");
-			document.getElementById('initUserManager1').setAttribute("class","current");
+			$("#initUserManager").attr("class","sub-menu opened");
+			$("#initUserManager1").attr("class","current");
 		}
+		
+		//删除单个用户信息
+		function deleteOneUser(id){
+			layer.confirm('确认要删除吗？',function(index){
+				$.post("${ctx}/admin_user/deleteOneUser",{"userId":id},function(data){
+	    			if(data == "succeed"){
+	    				window.location.href="${ctx}/admin_user/findUserPage?exist=1";
+	    			}else if(data == "fail"){
+	    				alert('删除失败');
+	    			}
+	    		})                
+            });   
+        }
+		
+		//删除批量用户信息
+        function deleteMultiUser() {
+        	var arrDelete = document.getElementsByName("checkBox");
+        	var deleteStr="";
+			for(i in arrDelete){
+				if(arrDelete[i].checked){
+					deleteStr = deleteStr + arrDelete[i].value + ",";
+				}
+			}
+            layer.confirm('确认要批量删除吗？',function(index){
+        	   $.post("${ctx}/admin_user/deleteMultiUser",{"deleteStr":deleteStr},function(data){
+	    			if(data == "succeed"){
+	    				window.location.href="${ctx}/admin_user/findUserPage?exist=1";
+	    			}else if(data == "fail"){
+	    				alert('删除失败');
+	    			}
+	    		})      
+            });
+        }
+		
+		
 		
     </script>
    
@@ -59,12 +94,13 @@
                 </div> 
             </form>
             <xblock>
-            	<button class="layui-btn layui-btn-danger" onclick="delAll()">
+            	<button class="layui-btn layui-btn-danger" onClick="deleteMultiUser()">
             		<i class="layui-icon">&#xe640;</i>批量删除
             	</button>
             	<button class="layui-btn" onclick="member_add('添加用户','member-add.html','600','500')">
             		<i class="layui-icon">&#xe608;</i>添加
-            	</button><span class="x-right" style="line-height:40px">共有数据：${userPage.totalRow} 条</span></xblock>
+            	</button><span class="x-right" style="line-height:40px">共有数据：${userPage.totalRow} 条</span>
+            </xblock>
             <table class="layui-table">
                 <thead >
                     <tr>
@@ -86,8 +122,8 @@
                 <tbody align="center">
                 	<c:forEach var="userPage" items="${userPage.list}">
 	                    <tr>
-	                        <td><input type="checkbox" value="1" name=""></td>
-	                        <td>${userPage.userId}</td>
+	                        <td><input type="checkbox" value="${userPage.id}" name="checkBox"></td>
+	                        <td>${userPage.id}</td>
 	                        <td>${userPage.accout}</td>
 	                        <td>${userPage.password}</td>
 	                        <td>${userPage.nickName}</td>
@@ -108,12 +144,10 @@
 	                        	<span class="layui-btn layui-btn-normal layui-btn-mini">存在</span>
 	                        </td>
 	                        <td class="td-manage" align="center">
-	                            <a style="text-decoration:none"  onclick="member_password('修改','member-password.html','10001','600','400')"
-	                            href="javascript:;" title="修改">
+	                            <a style="text-decoration:none"  onclick="member_password('修改','member-password.html','10001','600','400')" href="javascript:;" title="修改">
 	                                <i class="layui-icon">&#xe631;</i>
 	                            </a>
-	                            <a title="删除" href="javascript:;" onclick="member_del(this,'1')" 
-	                            style="text-decoration:none">
+	                            <a title="删除" href="javascript:;" onclick="deleteOneUser(${userPage.id})" style="text-decoration:none">
 	                                <i class="layui-icon">&#xe640;</i>
 	                            </a>
 	                        </td>
@@ -124,29 +158,56 @@
             <!-- 右侧内容框架，更改从这里结束 -->
           </div>
           <!-- 分页处理开始 -->
-          <c:if test="${userPage.pageNumber-1 > 0}">
-    		<c:set var="prePage" value="${userPage.pageNumber-1}"></c:set>
-		  </c:if>
-		  <c:if test="${userPage.pageNumber-1 <= 0}">
-		   	<c:set var="prePage" value="1"></c:set>
-		  </c:if>
-		  <c:if test="${userPage.pageNumber+1 <= userPage.totalPage}">
-		    <c:set var="nextPage" value="${userPage.pageNumber+1}"></c:set>
-		  </c:if>
-		  <c:if test="${userPage.pageNumber+1 > userPage.totalPage}">
-		    <c:set var="nextPage" value="${userPage.totalPage}"></c:set>
-		  </c:if>
-		  <div align="center">
-			<a  class="page" style="margin-left:25px;" href="${ctx}/admin_user/findUserPage?accout=${param.accout}&&currentPage=1&&pageSize=${userPage.pageSize}&&exist=1">首页</a>
-			<a  class="page" href="${ctx}/admin_user/findUserPage?accout=${param.accout}&&currentPage=${prePage}&&pageSize=${userPage.pageSize}&&exist=1">上一页</a>
-			<a  class="page" href="${ctx}/admin_user/findUserPage?accout=${param.accout}&&currentPage=${nextPage}&&pageSize=${userPage.pageSize}&&exist=1">下一页</a>
-			<a  class="page" href="${ctx}/admin_user/findUserPage?accout=${param.accout}&&currentPage=${userPage.totalPage}&&pageSize=${userPage.pageSize}&&exist=1">末页</a>			
-		  </div>
-		  <div align="center" style="margin-top:20px;">
-			<span style="margin-right:10px;">${userPage.pageNumber}</span>
-			<span>/</span>
-			<span style="margin-left:10px;">${userPage.totalPage}</span>
-		  </div>
+	          	<!-- 上一页 -->
+	          	<c:choose>
+	        		<c:when test="${userPage.pageNumber-1 > 0}">
+	        			<c:set var="prePage" value="${userPage.pageNumber-1}"></c:set>
+	        		</c:when>
+	        		<c:when test="${userPage.pageNumber-1 <= 0}">
+	        			<c:set var="prePage" value="1"></c:set>
+	        		</c:when>
+	        	</c:choose>
+	        	<!-- 查询结果不为空 -->
+	          	<c:if test="${userPage.totalPage != 0}">
+	          		<!-- 下一页 -->
+	          		<c:choose>
+	          			<c:when test="${userPage.pageNumber+1 <= userPage.totalPage}">
+	          				<c:set var="nextPage" value="${userPage.pageNumber+1}"></c:set>
+	          			</c:when>
+	          			<c:when test="${userPage.pageNumber+1 > userPage.totalPage}">
+	          				<c:set var="nextPage" value="${userPage.totalPage}"></c:set>
+	          			</c:when>
+	          		</c:choose>
+	          		<!-- 末页 -->
+	          		<c:set var="lastPage" value="${userPage.totalPage}"></c:set>
+	          	</c:if>
+	          	<!-- 查询结果为空 -->
+	          	<c:if test="${userPage.totalPage == 0}">
+	          		<!-- 下一页 -->
+	          		<c:set var="nextPage" value="1"></c:set>
+	          		<!-- 末页 -->
+	          		<c:set var="lastPage" value="1"></c:set>
+	          	</c:if>
+			  <div align="center">
+				<a  class="page" style="margin-left:25px;" href="${ctx}/admin_user/findUserPage?accout=${param.accout}&&pageNumber=1&&pageSize=${userPage.pageSize}&&exist=1">首页</a>
+				<a  class="page" href="${ctx}/admin_user/findUserPage?accout=${param.accout}&&pageNumber=${prePage}&&pageSize=${userPage.pageSize}&&exist=1">上一页</a>
+				<a  class="page" href="${ctx}/admin_user/findUserPage?accout=${param.accout}&&pageNumber=${nextPage}&&pageSize=${userPage.pageSize}&&exist=1">下一页</a>
+				<a  class="page" href="${ctx}/admin_user/findUserPage?accout=${param.accout}&&pageNumber=${lastPage}&&pageSize=${userPage.pageSize}&&exist=1">末页</a>			
+			  </div>
+			  <div align="center" style="margin-top:20px;">
+				<span style="margin-right:10px;">
+					<!-- 查询结果不为空 -->
+					<c:if test="${userPage.totalPage != 0}">
+						${userPage.pageNumber}
+					</c:if>
+					<!-- 查询结果为空 -->
+					<c:if test="${userPage.totalPage == 0}">
+						0
+					</c:if>
+				</span>
+				<span>/</span>
+				<span style="margin-left:10px;">${userPage.totalPage}</span>
+			  </div>
 		  <!-- 分页处理结束 -->
         </div>
         <!-- 右侧主体结束 -->
@@ -198,13 +259,6 @@
           
         });
 
-        //批量删除提交
-         function delAll () {
-            layer.confirm('确认要删除吗？',function(index){
-                //捉到所有被选中的，发异步进行删除
-                layer.msg('删除成功', {icon: 1});
-            });
-         }
          /*用户-添加*/
         function member_add(title,url,w,h){
             x_admin_show(title,url,w,h);
@@ -242,14 +296,6 @@
         /*密码-修改*/
         function member_password(title,url,id,w,h){
             x_admin_show(title,url,w,h);  
-        }
-        /*用户-删除*/
-        function member_del(obj,id){
-            layer.confirm('确认要删除吗？',function(index){
-                //发异步删除数据
-                $(obj).parents("tr").remove();
-                layer.msg('已删除!',{icon:1,time:1000});
-            });
         }
         </script>
         <script>

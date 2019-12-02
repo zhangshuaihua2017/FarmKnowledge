@@ -17,6 +17,7 @@
     <script type="text/javascript" src="./js/xadmin.js"></script>
     
     <script>
+    	//管理员登陆
     	function adminLogin(){
     		var accout = $("#accout").val();
     		var password = $("#password").val();
@@ -24,12 +25,12 @@
     			alert('输入框不能为空');
     		}else{
 	    		$.post("${ctx}/admin/login",{"accout":accout,"password":password},function(data){
-	    			if(data == "fail"){
+	    			if(data == "succeed"){
+	    				window.location.href="${ctx}/index.jsp";
+	    			}else if(data == "fail"){
 	    				alert('账号或密码错误');
 	    			}else if(data == "notExist"){
 	    				alert('管理员账号不存在');
-	    			}else{
-	    				window.location.href="http://localhost:8080/FarmKnowledge/index.jsp";
 	    			}
 	    		}) 
     		}

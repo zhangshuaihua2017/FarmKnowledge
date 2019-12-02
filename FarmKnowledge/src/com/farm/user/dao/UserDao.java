@@ -1,6 +1,5 @@
 package  com.farm.user.dao;
 
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.List;
 
@@ -50,14 +49,32 @@ public class UserDao {
 	}
 	
 	//查询User表内用户信息（User表）
-	public Page<User> findUserPage(int currentPage,int everyCount,String accout,int exist) {
+	public Page<User> findUserPage(int pageNumber,int everyCount,String accout,int exist) {
 		Page<User> userPage;
 		if(accout == null || accout.equals("")) {
-			userPage = User.dao.paginate(currentPage, everyCount, "select *","from user where exist=?",exist);	
+			userPage = User.dao.paginate(pageNumber, everyCount, "select *","from user where exist=?",exist);	
 		}else {
-			userPage = User.dao.paginate(currentPage, everyCount, "select *","from user where exist=? and accout like?",exist,"%"+accout+"%");
+			userPage = User.dao.paginate(pageNumber, everyCount, "select *","from user where exist=? and accout like?",exist,"%"+accout+"%");
 		}
 		return userPage;
+	}
+	
+	//删除User表内单个用户信息（User表修改exist字段为0）
+	public boolean deleteOneUser(int userId) {
+		boolean succeed = User.dao.findById(userId).set("exist", 0).update();
+		return succeed;
+	}
+	
+	//恢复User表内单个用户信息（User表修改exist字段为1）
+	public boolean recoveryOneUser(int userId) {
+		boolean succeed = User.dao.findById(userId).set("exist", 1).update();
+		return succeed;
+	}
+	
+	//彻底删除User表内用户信息（User表delete）
+	public boolean deleteThoroughUser(int userId) {
+		boolean succeed = User.dao.deleteById(userId);
+		return succeed;
 	}
 	
 }

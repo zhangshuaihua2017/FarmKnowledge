@@ -25,8 +25,8 @@
 	<script>
 		//初始化左侧菜单（作物管理）
 		window.onload = function(){
-			document.getElementById('initCropManager').setAttribute("class","sub-menu opened");
-			document.getElementById('initCropManager1').setAttribute("class","current");
+			$("#initCropManager").attr("class","sub-menu opened");
+			$("#initCropManager1").attr("class","current");
 		}
     </script>
 
@@ -48,7 +48,7 @@
                 <div class="layui-form-pane" style="text-align: center;">
                   <div class="layui-form-item" style="display: inline-block;">
                     <div class="layui-input-inline">
-                      <input type="text" name="name" placeholder="请输入账号" autocomplete="off" class="layui-input" value="${param.name}">
+                      <input type="text" name="name" placeholder="请输入作物名称" autocomplete="off" class="layui-input" value="${param.name}">
                       <input type="hidden" name="exist" value="1"/>
                     </div>
                     <div class="layui-input-inline" style="width:80px">
@@ -87,7 +87,7 @@
                 	<c:forEach var="cropPage" items="${cropPage.list}">
 	                    <tr>
 	                        <td><input type="checkbox" value="1" name=""></td>
-	                        <td>${cropPage.cropId}</td>
+	                        <td>${cropPage.id}</td>
 	                        <td>${cropPage.name}</td>
 	                        <td>${cropPage.price}</td>
 	                        <td><img style="width:50px;height:50px" src="${cropPage.img1}" /></td>
@@ -100,12 +100,10 @@
 	                        	<span class="layui-btn layui-btn-normal layui-btn-mini">存在</span>
 	                        </td>
 	                        <td class="td-manage" align="center">
-	                            <a style="text-decoration:none"  onclick="member_password('修改','member-password.html','10001','600','400')"
-	                            href="javascript:;" title="修改">
+	                            <a style="text-decoration:none"  onclick="member_password('修改','member-password.html','10001','600','400')" href="javascript:;" title="修改">
 	                                <i class="layui-icon">&#xe631;</i>
 	                            </a>
-	                            <a title="删除" href="javascript:;" onclick="member_del(this,'1')" 
-	                            style="text-decoration:none">
+	                            <a title="删除" href="javascript:;" onclick="member_del(this,'1')" style="text-decoration:none">
 	                                <i class="layui-icon">&#xe640;</i>
 	                            </a>
 	                        </td>
@@ -116,29 +114,56 @@
             <!-- 右侧内容框架，更改从这里结束 -->
           </div>
           <!-- 分页处理开始 -->
-          <c:if test="${cropPage.pageNumber-1 > 0}">
-    		<c:set var="prePage" value="${cropPage.pageNumber-1}"></c:set>
-    	  </c:if>
-    	  <c:if test="${cropPage.pageNumber-1 <= 0}">
-    		<c:set var="prePage" value="1"></c:set>
-    	  </c:if>
-    	  <c:if test="${cropPage.pageNumber+1 <= cropPage.totalPage}">
-    		<c:set var="nextPage" value="${cropPage.pageNumber+1}"></c:set>
-    	  </c:if>
-    	  <c:if test="${cropPage.pageNumber+1 > cropPage.totalPage}">
-    		<c:set var="nextPage" value="${cropPage.totalPage}"></c:set>
-    	  </c:if>
-		  <div align="center">
-			<a class="page" style="margin-left:25px;" href="${ctx}/admin_crop/findCropPage?name=${param.name}&&currentPage=1&&pageSize=${cropPage.pageSize}&&exist=1">首页</a>
-			<a class="page" href="${ctx}/admin_crop/findCropPage?name=${param.name}&&currentPage=${prePage}&&pageSize=${cropPage.pageSize}&&exist=1">上一页</a>
-			<a class="page" href="${ctx}/admin_crop/findCropPage?name=${param.name}&&currentPage=${nextPage}&&pageSize=${cropPage.pageSize}&&exist=1">下一页</a>
-			<a class="page" href="${ctx}/admin_crop/findCropPage?name=${param.name}&&currentPage=${cropPage.totalPage}&&pageSize=${cropPage.pageSize}&&exist=1">末页</a>			
-		  </div>
-		  <div align="center" style="margin-top:20px;">
-			<span style="margin-right:10px;">${cropPage.pageNumber}</span>
-			<span>/</span>
-			<span style="margin-left:10px;">${cropPage.totalPage}</span>
-		  </div>
+          		<!-- 上一页 -->
+	          	<c:choose>
+	        		<c:when test="${cropPage.pageNumber-1 > 0}">
+	        			<c:set var="prePage" value="${cropPage.pageNumber-1}"></c:set>
+	        		</c:when>
+	        		<c:when test="${cropPage.pageNumber-1 <= 0}">
+	        			<c:set var="prePage" value="1"></c:set>
+	        		</c:when>
+	        	</c:choose>
+	        	<!-- 查询结果不为空 -->
+	          	<c:if test="${cropPage.totalPage != 0}">
+	          		<!-- 下一页 -->
+	          		<c:choose>
+	          			<c:when test="${cropPage.pageNumber+1 <= cropPage.totalPage}">
+	          				<c:set var="nextPage" value="${cropPage.pageNumber+1}"></c:set>
+	          			</c:when>
+	          			<c:when test="${cropPage.pageNumber+1 > cropPage.totalPage}">
+	          				<c:set var="nextPage" value="${cropPage.totalPage}"></c:set>
+	          			</c:when>
+	          		</c:choose>
+	          		<!-- 末页 -->
+	          		<c:set var="lastPage" value="${cropPage.totalPage}"></c:set>
+	          	</c:if>
+	          	<!-- 查询结果为空 -->
+	          	<c:if test="${cropPage.totalPage == 0}">
+	          		<!-- 下一页 -->
+	          		<c:set var="nextPage" value="1"></c:set>
+	          		<!-- 末页 -->
+	          		<c:set var="lastPage" value="1"></c:set>
+	          	</c:if>
+			  <div align="center">
+				<a  class="page" style="margin-left:25px;" href="${ctx}/admin_crop/findCropPage?name=${param.name}&&pageNumber=1&&pageSize=${cropPage.pageSize}&&exist=1">首页</a>
+				<a  class="page" href="${ctx}/admin_crop/findCropPage?name=${param.name}&&pageNumber=${prePage}&&pageSize=${cropPage.pageSize}&&exist=1">上一页</a>
+				<a  class="page" href="${ctx}/admin_crop/findCropPage?name=${param.name}&&pageNumber=${nextPage}&&pageSize=${cropPage.pageSize}&&exist=1">下一页</a>
+				<a  class="page" href="${ctx}/admin_crop/findCropPage?name=${param.name}&&pageNumber=${lastPage}&&pageSize=${cropPage.pageSize}&&exist=1">末页</a>			
+			  </div>
+			  <div align="center" style="margin-top:20px;">
+				<span style="margin-right:10px;">
+					<!-- 查询结果不为空 -->
+					<c:if test="${cropPage.totalPage != 0}">
+						${cropPage.pageNumber}
+					</c:if>
+					<!-- 查询结果为空 -->
+					<c:if test="${cropPage.totalPage == 0}">
+						0
+					</c:if>
+				</span>
+				<span>/</span>
+				<span style="margin-left:10px;">${cropPage.totalPage}</span>
+			  </div>
 		  <!-- 分页处理结束 -->
         </div>
         <!-- 右侧主体结束 -->

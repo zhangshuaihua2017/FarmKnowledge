@@ -22,7 +22,7 @@ public class AdminController extends Controller{
 			Admin admin = service.loginAdmin(accout, password);
 			if(admin != null) {
 				setSessionAttr("admin",admin);
-				forwardAction("/admin/gotoIndex");
+				renderText("succeed");
 			}else {
 				renderText("fail");
 			}
@@ -31,19 +31,19 @@ public class AdminController extends Controller{
 		}
 	}
 	
-	//查询Admin表内所有管理员信息（Admin表），跳转到管理员列表页面，
+	//查询Admin表内所有管理员信息，跳转到管理员列表页面（Admin表）
 	public void findAdminPage() {
 		String accout = get("accout");
-		String page = get("currentPage");
+		String page = get("pageNumber");
 		String count = get("pageSize");
 		int exist = getInt("exist");
-		int currentPage;
+		int pageNumber;
 		int everyCount;
 		
 		if(page == null) {
-			currentPage = 1;
+			pageNumber = 1;
 		}else {
-			currentPage = Integer.parseInt(page);
+			pageNumber = Integer.parseInt(page);
 		}
 		if(count == null) {
 			everyCount = 1;
@@ -51,7 +51,7 @@ public class AdminController extends Controller{
 			everyCount = Integer.parseInt(count);
 		}
 		
-		Page<Admin> list = new AdminService().findAdminPage(currentPage,everyCount,accout,exist);
+		Page<Admin> list = new AdminService().findAdminPage(pageNumber,everyCount,accout,exist);
 		setAttr("adminPage", list);
 		if(exist == 1) {
 			renderJsp("/admin-list.jsp");

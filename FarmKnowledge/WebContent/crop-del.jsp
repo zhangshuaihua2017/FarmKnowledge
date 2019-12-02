@@ -19,8 +19,8 @@
 	<script>
 		//初始化左侧菜单（作物管理）
 		window.onload = function(){
-			document.getElementById('initCropManager').setAttribute("class","sub-menu opened");
-			document.getElementById('initCropManager2').setAttribute("class","current");
+			$("#initCropManager").attr("class","sub-menu opened");
+			$("#initCropManager2").attr("class","current");
 		}
     </script>
 
@@ -50,7 +50,12 @@
                   </div>
                 </div> 
             </form>
-            <xblock><button class="layui-btn layui-btn-danger" onclick="recoverAll()"><i class="layui-icon">&#xe640;</i>批量恢复</button><span class="x-right" style="line-height:40px">共有数据：88 条</span></xblock>
+            <xblock>
+	            <button class="layui-btn layui-btn-danger" onclick="recoverAll()">
+	          		<i class="layui-icon">&#xe640;</i>批量恢复
+	            </button>
+	            <span class="x-right" style="line-height:40px">共有数据：88 条</span>
+	        </xblock>
             <table class="layui-table">
                 <thead >
                     <tr>
@@ -87,8 +92,7 @@
                             <a style="text-decoration:none" onclick="member_recover(this,'10001')" href="javascript:;" title="恢复">
                                 <i class="layui-icon">&#xe618;</i>
                             </a>
-                            <a title="彻底删除" href="javascript:;" onclick="member_unset(this,'1')" 
-                            style="text-decoration:none">
+                            <a title="彻底删除" href="javascript:;" onclick="member_unset(this,'1')" style="text-decoration:none">
                                 <i class="layui-icon">&#xe640;</i>
                             </a>
                         </td>

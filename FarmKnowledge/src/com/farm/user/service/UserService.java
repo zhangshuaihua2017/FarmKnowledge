@@ -45,8 +45,23 @@ public class UserService {
     }
 
 	//查询User表内用户信息（User表）
-	public Page<User> findUserPage(int currentPage,int everyCount,String accout,int exist) {
-		return new UserDao().findUserPage(currentPage,everyCount,accout,exist);
+	public Page<User> findUserPage(int pageNumber,int everyCount,String accout,int exist) {
+		return new UserDao().findUserPage(pageNumber,everyCount,accout,exist);
+	}
+	
+	//删除User表内单个用户信息（User表修改exist字段为0）
+	public boolean deleteOneUser(int userId) {
+		return new UserDao().deleteOneUser(userId);
+	}
+	
+	//恢复User表内单个用户信息（User表修改exist字段为1）
+	public boolean recoveryOneUser(int userId) {
+		return new UserDao().recoveryOneUser(userId);
+	}
+	
+	//彻底删除User表内用户信息（User表delete）
+	public boolean deleteThoroughUser(int userId) {
+		return new UserDao().deleteThoroughUser(userId);
 	}
 	
 }

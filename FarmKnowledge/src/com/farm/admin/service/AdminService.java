@@ -17,8 +17,8 @@ public class AdminService {
 	}
 	
 	//查询Admin表内所有管理员信息（Admin表）
-	public Page<Admin> findAdminPage(int currentPage,int everyCount,String accout,int exist) {
-		return new AdminDao().findAdminPage(currentPage,everyCount,accout,exist);
+	public Page<Admin> findAdminPage(int pageNumber,int everyCount,String accout,int exist) {
+		return new AdminDao().findAdminPage(pageNumber,everyCount,accout,exist);
 	}	
 	
 }

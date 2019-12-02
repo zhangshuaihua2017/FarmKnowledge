@@ -25,9 +25,55 @@
     <script>
 		//初始化左侧菜单（用户管理）
 		window.onload = function(){
-			document.getElementById('initUserManager').setAttribute("class","sub-menu opened");
-			document.getElementById('initUserManager2').setAttribute("class","current");
+			$("#initUserManager").attr("class","sub-menu opened");
+			$("#initUserManager2").attr("class","current");
 		}
+		
+		//恢复单个用户信息
+        function recoveryOneUser(id){
+            layer.confirm('确认要恢复吗？',function(index){
+            	$.post("${ctx}/admin_user/recoveryOneUser",{"userId":id},function(data){
+	    			if(data == "succeed"){
+	    				window.location.href="${ctx}/admin_user/findUserPage?exist=0";
+	    			}else if(data == "fail"){
+	    				alert('恢复失败');
+	    			}
+	    		})    
+            });
+        }
+		
+        //恢复批量用户信息
+        function recoveryMultiUser() {
+            var arrRecovery = document.getElementsByName("checkBox");
+            var recoveryStr="";
+		    for(i in arrRecovery){
+			   if(arrRecovery[i].checked){
+				   recoveryStr = recoveryStr + arrRecovery[i].value + ",";
+			   }
+		    }
+            layer.confirm('确认要批量恢复吗？',function(index){
+        	   $.post("${ctx}/admin_user/recoveryMultiUser",{"recoveryStr":recoveryStr},function(data){
+		    	 	 if(data == "succeed"){
+		    			 window.location.href="${ctx}/admin_user/findUserPage?exist=0";
+		    		 }else if(data == "fail"){
+		    			 alert('删除失败');
+		    		 }
+	    	   }) 
+            });
+         }
+        
+        //彻底删除用户信息
+        function deleteThoroughUser(id){
+            layer.confirm('彻底删除无法恢复，确认要删除数据吗？',function(index){
+            	$.post("${ctx}/admin_user/deleteThoroughUser",{"userId":id},function(data){
+	    			if(data == "succeed"){
+	    				window.location.href="${ctx}/admin_user/findUserPage?exist=0";
+	    			}else if(data == "fail"){
+	    				alert('删除失败');
+	    			}
+	    		}) 
+            });
+        }
     </script>
     
 </head>
@@ -48,7 +94,7 @@
                 <div class="layui-form-pane" style="text-align: center;">
                   <div class="layui-form-item" style="display: inline-block;">
                     <div class="layui-input-inline">
-                      <input type="text" name="accout" placeholder="请输入账号" autocomplete="off" class="layui-input">
+                      <input type="text" name="accout" placeholder="请输入账号" autocomplete="off" class="layui-input" value="${param.accout}">
                       <input type="hidden" name="exist" value="0"/>
                     </div>
                     <div class="layui-input-inline" style="width:80px">
@@ -58,7 +104,7 @@
                 </div> 
             </form>
             <xblock>
-            	<button class="layui-btn layui-btn-danger" onclick="recoverAll()">
+            	<button class="layui-btn layui-btn-danger" onClick="recoveryMultiUser()">
             		<i class="layui-icon">&#xe640;</i>批量恢复
             	</button>
             	<span class="x-right" style="line-height:40px">共有数据：${userPage.totalRow} 条</span>
@@ -82,28 +128,27 @@
                     </tr>
                 </thead>
                 <tbody align="center">
-                    <c:forEach var="userPage" items="${userPage.list}">
+                    <c:forEach var="page" items="${userPage.list}">
 	                    <tr>
-	                        <td><input type="checkbox" value="1" name=""></td>
-	                        <td>${userPage.userId}</td>
-	                        <td>${userPage.accout}</td>
-	                        <td>${userPage.password}</td>
-	                        <td>${userPage.nickName}</td>
-	                        <td><img style="width:50px;height:50px" src="${userPage.photo}" /></td>
-	                        <td>${userPage.level}</td>
-	                        <td>${userPage.experience}</td>
-	                        <td>${userPage.grade}</td>
-	                        <td>${userPage.money}</td>
+	                        <td><input type="checkbox" value="${page.id}" name="checkBox"></td>
+	                        <td>${page.id}</td>
+	                        <td>${page.accout}</td>
+	                        <td>${page.password}</td>
+	                        <td>${page.nickName}</td>
+	                        <td><img style="width:50px;height:50px" src="${page.photo}" /></td>
+	                        <td>${page.level}</td>
+	                        <td>${page.experience}</td>
+	                        <td>${page.grade}</td>
+	                        <td>${page.money}</td>
 	                        <td>离线</td>
 	                        <td class="td-status">
 	                        	<span class="layui-btn layui-btn-danger layui-btn-mini">已删除</span>
 	                        </td>
 	                        <td class="td-manage" align="center">
-	                            <a style="text-decoration:none" onclick="member_recover(this,'10001')" href="javascript:;" title="恢复">
+	                            <a style="text-decoration:none" onclick="recoveryOneUser(${page.id})" href="javascript:;" title="恢复">
 	                                <i class="layui-icon">&#xe618;</i>
 	                            </a>
-	                            <a title="彻底删除" href="javascript:;" onclick="member_unset(this,'1')" 
-	                            style="text-decoration:none">
+	                            <a title="彻底删除" href="javascript:;" onclick="deleteThoroughUser(${page.id})" style="text-decoration:none">
 	                                <i class="layui-icon">&#xe640;</i>
 	                            </a>
 	                        </td>
@@ -114,29 +159,56 @@
             <!-- 右侧内容框架，更改从这里结束 -->
           </div>
           <!-- 分页处理开始 -->
-          <c:if test="${userPage.pageNumber-1 > 0}">
-    		<c:set var="prePage" value="${userPage.pageNumber-1}"></c:set>
-		  </c:if>
-		  <c:if test="${userPage.pageNumber-1 <= 0}">
-		   	<c:set var="prePage" value="1"></c:set>
-		  </c:if>
-		  <c:if test="${userPage.pageNumber+1 <= userPage.totalPage}">
-		    <c:set var="nextPage" value="${userPage.pageNumber+1}"></c:set>
-		  </c:if>
-		  <c:if test="${userPage.pageNumber+1 > userPage.totalPage}">
-		    <c:set var="nextPage" value="${userPage.totalPage}"></c:set>
-		  </c:if>
-		  <div align="center">
-			<a  class="page" style="margin-left:25px;" href="${ctx}/admin_user/findUserPage?accout=${param.accout}&&currentPage=1&&pageSize=${userPage.pageSize}&&exist=0">首页</a>
-			<a  class="page" href="${ctx}/admin_user/findUserPage?accout=${param.accout}&&currentPage=${prePage}&&pageSize=${userPage.pageSize}&&exist=0">上一页</a>
-			<a  class="page" href="${ctx}/admin_user/findUserPage?accout=${param.accout}&&currentPage=${nextPage}&&pageSize=${userPage.pageSize}&&exist=0">下一页</a>
-			<a  class="page" href="${ctx}/admin_user/findUserPage?accout=${param.accout}&&currentPage=${userPage.totalPage}&&pageSize=${userPage.pageSize}&&exist=0">末页</a>			
-		  </div>
-		  <div align="center" style="margin-top:20px;">
-			<span style="margin-right:10px;">${userPage.pageNumber}</span>
-			<span>/</span>
-			<span style="margin-left:10px;">${userPage.totalPage}</span>
-		  </div>
+          <!-- 上一页 -->
+	          	<c:choose>
+	        		<c:when test="${userPage.pageNumber-1 > 0}">
+	        			<c:set var="prePage" value="${userPage.pageNumber-1}"></c:set>
+	        		</c:when>
+	        		<c:when test="${userPage.pageNumber-1 <= 0}">
+	        			<c:set var="prePage" value="1"></c:set>
+	        		</c:when>
+	        	</c:choose>
+	        	<!-- 查询结果不为空 -->
+	          	<c:if test="${userPage.totalPage != 0}">
+	          		<!-- 下一页 -->
+	          		<c:choose>
+	          			<c:when test="${userPage.pageNumber+1 <= userPage.totalPage}">
+	          				<c:set var="nextPage" value="${userPage.pageNumber+1}"></c:set>
+	          			</c:when>
+	          			<c:when test="${userPage.pageNumber+1 > userPage.totalPage}">
+	          				<c:set var="nextPage" value="${userPage.totalPage}"></c:set>
+	          			</c:when>
+	          		</c:choose>
+	          		<!-- 末页 -->
+	          		<c:set var="lastPage" value="${userPage.totalPage}"></c:set>
+	          	</c:if>
+	          	<!-- 查询结果为空 -->
+	          	<c:if test="${userPage.totalPage == 0}">
+	          		<!-- 下一页 -->
+	          		<c:set var="nextPage" value="1"></c:set>
+	          		<!-- 末页 -->
+	          		<c:set var="lastPage" value="1"></c:set>
+	          	</c:if>
+			  <div align="center">
+				<a  class="page" style="margin-left:25px;" href="${ctx}/admin_user/findUserPage?accout=${param.accout}&&pageNumber=1&&pageSize=${userPage.pageSize}&&exist=0">首页</a>
+				<a  class="page" href="${ctx}/admin_user/findUserPage?accout=${param.accout}&&pageNumber=${prePage}&&pageSize=${userPage.pageSize}&&exist=0">上一页</a>
+				<a  class="page" href="${ctx}/admin_user/findUserPage?accout=${param.accout}&&pageNumber=${nextPage}&&pageSize=${userPage.pageSize}&&exist=0">下一页</a>
+				<a  class="page" href="${ctx}/admin_user/findUserPage?accout=${param.accout}&&pageNumber=${lastPage}&&pageSize=${userPage.pageSize}&&exist=0">末页</a>			
+			  </div>
+			  <div align="center" style="margin-top:20px;">
+				<span style="margin-right:10px;">
+					<!-- 查询结果不为空 -->
+					<c:if test="${userPage.totalPage != 0}">
+						${userPage.pageNumber}
+					</c:if>
+					<!-- 查询结果为空 -->
+					<c:if test="${userPage.totalPage == 0}">
+						0
+					</c:if>
+				</span>
+				<span>/</span>
+				<span style="margin-left:10px;">${userPage.totalPage}</span>
+			  </div>
 		  <!-- 分页处理结束 -->
         </div>
         <!-- 右侧主体结束 -->
@@ -188,30 +260,6 @@
           
         });
 
-        //批量恢复提交
-             function recoverAll () {
-                layer.confirm('确认要批量恢复吗？',function(index){
-                    //捉到所有被选中的，发异步进行恢复
-                    layer.msg('恢复成功', {icon: 1});
-                });
-             }
-
-            /*用户-恢复*/
-            function member_recover(obj,id){
-                layer.confirm('确认要恢复吗？',function(index){
-                    //发异步删除数据
-                    $(obj).parents("tr").remove();
-                    layer.msg('已恢复!',{icon:1,time:1000});
-                });
-            }
-            /*用户-彻底删除*/
-            function member_unset(obj,id){
-                layer.confirm('彻底删除无法恢复，确认要删除数据吗？',function(index){
-                    //发异步删除数据
-                    $(obj).parents("tr").remove();
-                    layer.msg('已彻底删除',{icon:1,time:1000});
-                });
-            }
         </script>
         <script>
         //百度统计可去掉

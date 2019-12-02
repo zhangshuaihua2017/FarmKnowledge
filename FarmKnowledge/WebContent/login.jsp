@@ -28,7 +28,7 @@
 	    			if(data == "succeed"){
 	    				window.location.href="${ctx}/index.jsp";
 	    			}else if(data == "fail"){
-	    				alert('账号或密码');
+	    				alert('账号或密码错误');
 	    			}else if(data == "notExist"){
 	    				alert('管理员账号不存在');
 	    			}

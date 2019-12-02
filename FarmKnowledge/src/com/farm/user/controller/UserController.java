@@ -7,19 +7,19 @@ import org.json.JSONObject;
 import com.farm.model.User;
 import com.farm.user.service.UserService;
 import com.jfinal.core.Controller;
+import com.jfinal.kit.HttpKit;
 
 public class UserController extends Controller{
 	
 	//用户登录
 	public void loginByOpenId() {
-		
-		String json = get(0);
-		
-		JSONObject jsonObject = new JSONObject(json);
+		String jsonStr =  HttpKit.readData(getRequest());
+		System.out.println(jsonStr);
+		JSONObject jsonObject = new JSONObject(jsonStr);
 		String openId = jsonObject.getString("openId");
 		String nickName = jsonObject.getString("nickName");
 		String photo = URLDecoder.decode(jsonObject.getString("photo"));
-		
+		System.out.println(jsonObject.toString());
 		UserService service = new UserService();
 		if(service.isExistUser(openId)) { //已存在该用户，查询用户信息
 			User user = service.findUserByOpenId(openId);

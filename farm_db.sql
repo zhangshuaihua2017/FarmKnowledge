@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50506
 File Encoding         : 65001
 
-Date: 2019-12-02 08:53:00
+Date: 2019-12-02 19:25:22
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -70,6 +70,8 @@ CREATE TABLE `user` (
   `experience` bigint(11) DEFAULT '0',
   `grade` int(11) DEFAULT '1',
   `money` bigint(11) DEFAULT '0',
+  `water` int(11) DEFAULT '0',
+  `fertilizer` int(11) DEFAULT '0',
   `online` int(11) DEFAULT '1',
   `exist` int(11) DEFAULT '1',
   `land1` int(11) DEFAULT '1',
@@ -91,14 +93,18 @@ CREATE TABLE `user` (
   `land17` int(11) DEFAULT '0',
   `land18` int(11) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('9', '皮皮涛', '123', 'yxt', 'https://zhangshuaihua2017.github.io/lianxi/picture/yxt.jpg', '1', '0', '1', '0', '1', '1', '1', '1', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
-INSERT INTO `user` VALUES ('10', '皮皮天', '123', 'jgd', 'https://zhangshuaihua2017.github.io/lianxi/picture/jgd.JPG', '1', '0', '1', '0', '1', '1', '1', '1', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
-INSERT INTO `user` VALUES ('11', '傻飞', '123', 'syf', 'https://zhangshuaihua2017.github.io/lianxi/picture/sf.JPG', '1', '0', '1', '0', '1', '1', '1', '1', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
+INSERT INTO `user` VALUES ('9', '皮皮涛', '123', 'yxt', 'https://zhangshuaihua2017.github.io/lianxi/picture/yxt.jpg', '1', '0', '1', '0', null, null, '1', '0', '1', '1', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
+INSERT INTO `user` VALUES ('10', '皮皮天', '123', 'jgd', 'https://zhangshuaihua2017.github.io/lianxi/picture/jgd.JPG', '1', '0', '1', '0', null, null, '1', '0', '1', '1', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
+INSERT INTO `user` VALUES ('20', '49683747', null, 'sf', 'https://zhangshuaihua2017.github.io/lianxi/picture/sf.JPG', '1', '0', '1', '0', null, null, '1', '1', '1', '1', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
+INSERT INTO `user` VALUES ('22', '63657727', null, 'gsdg', 'sdg', '1', '0', '1', '0', null, null, '1', '0', '1', '1', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
+INSERT INTO `user` VALUES ('23', '65733208', null, 'zzz', 'zzz', '1', '0', '1', '0', null, null, '1', '0', '1', '1', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
+INSERT INTO `user` VALUES ('24', '39741489', null, 'fas', 'saf', '1', '0', '1', '0', null, null, '1', '0', '1', '1', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
+INSERT INTO `user` VALUES ('25', '45829373', null, 'xcv', '', '1', '0', '1', '0', null, null, '1', '1', '1', '1', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
 
 -- ----------------------------
 -- Table structure for `userauthority`
@@ -110,12 +116,17 @@ CREATE TABLE `userauthority` (
   `openId` varchar(150) DEFAULT NULL,
   `type` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of userauthority
 -- ----------------------------
-INSERT INTO `userauthority` VALUES ('10', '9', 'zxc', 'QQ');
+INSERT INTO `userauthority` VALUES ('14', '20', 'sf', 'QQ');
+INSERT INTO `userauthority` VALUES ('15', '21', 'asd', 'asd');
+INSERT INTO `userauthority` VALUES ('16', '22', 'sgs', 'sdg');
+INSERT INTO `userauthority` VALUES ('17', '23', 'zzz', 'QQ');
+INSERT INTO `userauthority` VALUES ('18', '24', 'asdas', 'asf');
+INSERT INTO `userauthority` VALUES ('19', '25', 'xcv', 'QQ');
 
 -- ----------------------------
 -- Table structure for `userbag`

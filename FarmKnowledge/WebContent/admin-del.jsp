@@ -16,12 +16,68 @@
     <script src="${ctx}/lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="${ctx}/js/xadmin.js"></script>
 
+	<style>
+    	.page{
+    		margin-right:25px;
+    	}
+    </style>
+
 	<script>
 		//初始化左侧菜单（管理员管理）
 		window.onload = function(){
 			$("#initAdminManager").attr("class","sub-menu opened");
 			$("#initAdminManager2").attr("class","current");
 		}
+		
+		//恢复单个管理员信息
+        function recoveryOneAdmin(id){
+            layer.confirm('确认要恢复吗？',function(index){
+            	$.post("${ctx}/admin/recoveryOneAdmin",{"id":id},function(data){
+	    			if(data == "succeed"){
+	    				window.location.href="${ctx}/admin/findAdminPage?exist=0";
+	    			}else if(data == "fail"){
+	    				layer.msg('恢复失败');
+	    			}
+	    		})    
+            });
+        }
+		
+        //恢复批量管理员信息
+        function recoveryMultiAdmin() {
+            var arrRecovery = document.getElementsByName("checkBox");
+            var recoveryStr="";
+		    for(i in arrRecovery){
+			   if(arrRecovery[i].checked){
+				   recoveryStr = recoveryStr + arrRecovery[i].value + ",";
+			   }
+		    }
+            layer.confirm('确认要批量恢复吗？',function(index){
+            	if(recoveryStr != ""){
+	        	    $.post("${ctx}/admin/recoveryMultiAdmin",{"recoveryStr":recoveryStr},function(data){
+			    	 	 if(data == "succeed"){
+			    			 window.location.href="${ctx}/admin/findAdminPage?exist=0";
+			    		 }else if(data == "fail"){
+			    			 layer.msg('恢复失败');
+			    		 }
+		    	    }) 
+            	}else{
+            		layer.msg('恢复不能为空');
+            	}
+            });
+         }
+        
+        //彻底删除管理员信息
+        function deleteThoroughAdmin(id){
+            layer.confirm('彻底删除无法恢复，确认要删除数据吗？',function(index){
+            	$.post("${ctx}/admin/deleteThoroughAdmin",{"id":id},function(data){
+	    			if(data == "succeed"){
+	    				window.location.href="${ctx}/admin/findAdminPage?exist=0";
+	    			}else if(data == "fail"){
+	    				layer.msg('删除失败');
+	    			}
+	    		}) 
+            });
+        }
     </script>
 
 </head>
@@ -42,7 +98,8 @@
                 <div class="layui-form-pane" style="text-align: center;">
                   <div class="layui-form-item" style="display: inline-block;">
                     <div class="layui-input-inline">
-                      <input type="text" name="username" placeholder="请输入管理员账号" autocomplete="off" class="layui-input">
+                      <input type="text" name="accout" placeholder="请输入管理员账号" autocomplete="off" class="layui-input" value="${param.accout}">
+                      <input type="hidden" name="exist" value="0"/>
                     </div>
                     <div class="layui-input-inline" style="width:80px">
                         <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
@@ -51,10 +108,10 @@
                 </div> 
             </form>
             <xblock>
-	            <button class="layui-btn layui-btn-danger" onclick="recoverAll()">
+	            <button class="layui-btn layui-btn-danger" onclick="recoveryMultiAdmin()">
 	            	<i class="layui-icon">&#xe640;</i>批量恢复
 	            </button>
-	            <span class="x-right" style="line-height:40px">共有数据：88 条</span>
+	            <span class="x-right" style="line-height:40px">${adminPage.totalRow}条</span>
             </xblock>
             <table class="layui-table">
                 <thead >
@@ -68,43 +125,81 @@
                     </tr>
                 </thead>
                 <tbody align="center">
-                    <tr>
-                        <td><input type="checkbox" value="1" name=""></td>
-                        <td>1</td>
-                        <td>admin</td>
-                        <td>admin</td>
-                        <td class="td-status">
-                        	<span class="layui-btn layui-btn-danger layui-btn-mini">已删除</span>
-                        </td>
-                        <td class="td-manage" align="center">
-                            <a style="text-decoration:none" onclick="member_recover(this,'10001')" href="javascript:;" title="恢复">
-                                <i class="layui-icon">&#xe618;</i>
-                            </a>
-                            <a title="彻底删除" href="javascript:;" onclick="member_unset(this,'1')" style="text-decoration:none">
-                                <i class="layui-icon">&#xe640;</i>
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" value="1" name=""></td>
-                        <td>2</td>
-                        <td>zsh</td>
-                        <td>123</td>
-                        <td class="td-status"><span class="layui-btn layui-btn-danger layui-btn-mini">已删除</span></td>
-                        <td class="td-manage" align="center">
-                            <a style="text-decoration:none" onclick="member_recover(this,'10001')" href="javascript:;" title="恢复">
-                                <i class="layui-icon">&#xe618;</i>
-                            </a>
-                            <a title="彻底删除" href="javascript:;" onclick="member_unset(this,'1')" 
-                            style="text-decoration:none">
-                                <i class="layui-icon">&#xe640;</i>
-                            </a>
-                        </td>
-                    </tr>
+                    <c:forEach var="adminPage" items="${adminPage.list}">
+	                    <tr>
+	                        <td><input type="checkbox" value="${adminPage.id}" name="checkBox"></td>
+	                        <td>${adminPage.id}</td>
+	                        <td>${adminPage.accout}</td>
+	                        <td>${adminPage.password}</td>
+	                        <td class="td-status">
+	                        	<span class="layui-btn layui-btn-danger layui-btn-mini">已删除</span>
+	                        </td>
+	                        <td class="td-manage" align="center">
+	                            <a style="text-decoration:none" onclick="recoveryOneAdmin(${adminPage.id})" href="javascript:;" title="恢复">
+	                                <i class="layui-icon">&#xe618;</i>
+	                            </a>
+	                            <a title="彻底删除" href="javascript:;" onclick="deleteThoroughAdmin(${adminPage.id})" style="text-decoration:none">
+	                                <i class="layui-icon">&#xe640;</i>
+	                            </a>
+	                        </td>
+	                    </tr>
+                    </c:forEach>
                 </tbody>
             </table>
             <!-- 右侧内容框架，更改从这里结束 -->
           </div>
+          <!-- 分页处理开始 -->
+          		<!-- 上一页 -->
+	          	<c:choose>
+	        		<c:when test="${adminPage.pageNumber-1 > 0}">
+	        			<c:set var="prePage" value="${adminPage.pageNumber-1}"></c:set>
+	        		</c:when>
+	        		<c:when test="${adminPage.pageNumber-1 <= 0}">
+	        			<c:set var="prePage" value="1"></c:set>
+	        		</c:when>
+	        	</c:choose>
+	        	<!-- 查询结果不为空 -->
+	          	<c:if test="${adminPage.totalPage != 0}">
+	          		<!-- 下一页 -->
+	          		<c:choose>
+	          			<c:when test="${adminPage.pageNumber+1 <= adminPage.totalPage}">
+	          				<c:set var="nextPage" value="${adminPage.pageNumber+1}"></c:set>
+	          			</c:when>
+	          			<c:when test="${adminPage.pageNumber+1 > adminPage.totalPage}">
+	          				<c:set var="nextPage" value="${adminPage.totalPage}"></c:set>
+	          			</c:when>
+	          		</c:choose>
+	          		<!-- 末页 -->
+	          		<c:set var="lastPage" value="${adminPage.totalPage}"></c:set>
+	          	</c:if>
+	          	<!-- 查询结果为空 -->
+	          	<c:if test="${adminPage.totalPage == 0}">
+	          		<!-- 下一页 -->
+	          		<c:set var="nextPage" value="1"></c:set>
+	          		<!-- 末页 -->
+	          		<c:set var="lastPage" value="1"></c:set>
+	          	</c:if>
+			  <div align="center">
+				<a  class="page" style="margin-left:25px;" href="${ctx}/admin/findAdminPage?accout=${param.accout}&&pageNumber=1&&pageSize=${adminPage.pageSize}&&exist=0">首页</a>
+				<a  class="page" href="${ctx}/admin/findAdminPage?accout=${param.accout}&&pageNumber=${prePage}&&pageSize=${adminPage.pageSize}&&exist=0">上一页</a>
+				<a  class="page" href="${ctx}/admin/findAdminPage?accout=${param.accout}&&pageNumber=${nextPage}&&pageSize=${adminPage.pageSize}&&exist=0">下一页</a>
+				<a  class="page" href="${ctx}/admin/findAdminPage?accout=${param.accout}&&pageNumber=${lastPage}&&pageSize=${adminPage.pageSize}&&exist=0">末页</a>			
+			  </div>
+			  <div align="center" style="margin-top:20px;">
+				<span style="margin-right:10px;">
+					<!-- 查询结果不为空 -->
+					<c:if test="${adminPage.totalPage != 0}">
+						${adminPage.pageNumber}
+					</c:if>
+					<!-- 查询结果为空 -->
+					<c:if test="${adminPage.totalPage == 0}">
+						0
+					</c:if>
+				</span>
+				<span>/</span>
+				<span style="margin-left:10px;">${adminPage.totalPage}</span>
+			  </div>
+		  <!-- 分页处理结束 -->
         </div>
         <!-- 右侧主体结束 -->
     </div>

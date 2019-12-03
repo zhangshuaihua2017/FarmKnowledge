@@ -23,6 +23,9 @@
     </style>
     
     <script>
+		if("" == "${admin.accout}"){
+			window.location.href="${ctx}/login.jsp";
+		}
 		//初始化左侧菜单（用户管理）
 		window.onload = function(){
 			$("#initUserManager").attr("class","sub-menu opened");
@@ -36,7 +39,7 @@
 	    			if(data == "succeed"){
 	    				window.location.href="${ctx}/admin_user/findUserPage?exist=0";
 	    			}else if(data == "fail"){
-	    				alert('恢复失败');
+	    				layer.msg('恢复失败');
 	    			}
 	    		})    
             });
@@ -57,11 +60,11 @@
 			    	 	 if(data == "succeed"){
 			    			 window.location.href="${ctx}/admin_user/findUserPage?exist=0";
 			    		 }else if(data == "fail"){
-			    			 alert('删除失败');
+			    			 layer.msg('恢复失败');
 			    		 }
 		    	    }) 
             	}else{
-            		window.location.href="${ctx}/admin_user/findUserPage?exist=0";
+            		layer.msg('恢复不能为空');
             	}
             });
          }
@@ -73,7 +76,7 @@
 	    			if(data == "succeed"){
 	    				window.location.href="${ctx}/admin_user/findUserPage?exist=0";
 	    			}else if(data == "fail"){
-	    				alert('删除失败');
+	    				layer.msg('删除失败');
 	    			}
 	    		}) 
             });

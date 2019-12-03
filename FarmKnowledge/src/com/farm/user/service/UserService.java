@@ -23,7 +23,7 @@ public class UserService {
 				UserDao userDao = new UserDao();
 				
 				//user表插入别名、头像
-				boolean a1 = userDao.addUser(generateAccount(), nickName, photo);
+				boolean a1 = userDao.addUser(generateAccout(), nickName, photo);
 				//获得user表刚插入数据的userId
 				int userId = userDao.getLastUserId();
 				//UserAuthority表内插入userId、openId、token
@@ -39,14 +39,24 @@ public class UserService {
 		return succeed;
     }
 	
-	//根据openId判断UserAuthority表内是否存在该用户（UserAuthority表）
+	//根据openId判断UserAuthority表内是否存在该用户exist=1（UserAuthority表）
 	public boolean isExistUserByOpenId(String openId){
         return new UserDao().isExistUserByOpenId(openId);
     }
 	
+	//根据openId判断UserAuthority表内是否存在该用户（UserAuthority表）
+	public boolean isExistUserByOpenIdAll(String openId){
+		return new UserDao().isExistUserByOpenIdAll(openId);
+	}
+	
 	//根据账号判断User表内是否存在该用户（User表）
 	public boolean isExistUserByAccout(String accout){
         return new UserDao().isExistUserByAccout(accout);
+    }
+	
+	//根据账号判断User表内是否存在该用户，除指定账号外（User表）
+	public boolean isExistUserByAccout(String accout1,String accout2){
+        return new UserDao().isExistUserByAccout(accout1,accout2);
     }
 
 	//查询User表内用户信息（User表）
@@ -59,9 +69,19 @@ public class UserService {
 		return new UserDao().deleteOneUser(userId);
 	}
 	
+	//删除UserAuthority表内单个授权信息（UserAuthority表修改exist字段为0）
+	public boolean deleteOneUserAuthority(int userId) {
+		return new UserDao().deleteOneUserAuthority(userId);
+	}
+	
 	//恢复User表内单个用户信息（User表修改exist字段为1）
 	public boolean recoveryOneUser(int userId) {
 		return new UserDao().recoveryOneUser(userId);
+	}
+	
+	//恢复UserAuthority表内单个授权信息（UserAuthority表修改exist字段为1）
+	public boolean recoveryOneUserAuthority(int userId) {
+		return new UserDao().recoveryOneUserAuthority(userId);
 	}
 	
 	//彻底删除User表内用户信息（User表delete）
@@ -69,8 +89,13 @@ public class UserService {
 		return new UserDao().deleteThoroughUser(userId);
 	}
 	
+	//彻底删除UserAuthority表内授权信息（User表delete）
+	public boolean deleteThoroughUserAuthority(int userId) {
+		return new UserDao().deleteThoroughUserAuthority(userId);
+	}
+	
 	//生成账号
-	public String generateAccount() {
+	public String generateAccout() {
 		String accout = "";
 		do{
 			accout = "";
@@ -86,9 +111,9 @@ public class UserService {
 		return new UserDao().getUpdateUserInfo(id);
 	}
 	
-	//修改用户信息（账号、别名、头像）
-	public boolean updateUser(int id, String accout, String nickName, String photo) {
-		return new UserDao().updateUser(id, accout, nickName, photo);
+	//修改用户信息（账号、别名、头像）根据修改前账号索引到
+	public boolean updateUser(String oldAccout, String newAccout, String nickName, String photo) {
+		return new UserDao().updateUser(oldAccout, newAccout, nickName, photo);
 	}
 
 }

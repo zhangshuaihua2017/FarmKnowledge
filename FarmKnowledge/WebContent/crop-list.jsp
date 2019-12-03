@@ -23,11 +23,69 @@
     </style>
 
 	<script>
+		if("" == "${admin.accout}"){
+			window.location.href="${ctx}/login.jsp";
+		}
 		//初始化左侧菜单（作物管理）
 		window.onload = function(){
 			$("#initCropManager").attr("class","sub-menu opened");
 			$("#initCropManager1").attr("class","current");
 		}
+		
+		//删除单个作物信息
+		function deleteOneCrop(id){
+			layer.confirm('确认要删除吗？',function(index){
+				$.post("${ctx}/admin_crop/deleteOneCrop",{"id":id},function(data){
+	    			if(data == "succeed"){
+	    				window.location.href="${ctx}/admin_crop/findCropPage?exist=1";
+	    			}else if(data == "fail"){
+	    				layer.msg('删除失败');
+	    			}
+	    		})                
+            });   
+        }
+		
+		//删除批量作物信息
+        function deleteMultiCrop() {
+        	var arrDelete = document.getElementsByName("checkBox");
+        	var deleteStr="";
+			for(i in arrDelete){
+				if(arrDelete[i].checked){
+					deleteStr = deleteStr + arrDelete[i].value + ",";
+				}
+			}
+            layer.confirm('确认要批量删除吗？',function(index){
+            	if(deleteStr != ""){
+	        	    $.post("${ctx}/admin_crop/deleteMultiCrop",{"deleteStr":deleteStr},function(data){
+		    			if(data == "succeed"){
+		    				window.location.href="${ctx}/admin_crop/findCropPage?exist=1";
+		    			}else if(data == "fail"){
+		    				layer.msg('删除失败');
+		    			}
+		    		}) 
+            	}else{
+            		layer.msg('删除不能为空');
+            	}
+            });
+        }
+		
+        //添加作物信息
+        function addCrop(title,url,w,h){
+            x_admin_show(title,url,w,h);
+        }
+        
+		 //根据作物id获取到要修改的作物信息
+		 function getUpdateCropInfo(id,path){
+			 $.post("${ctx}/admin_crop/getUpdateCropInfo",{"id":id},function(data){
+			 	updateCrop('编辑',path,'600','400');
+	    	 }) 
+		 }
+        
+     	//修改作物信息
+        function updateCrop (title,url,w,h) {
+            x_admin_show(title,url,w,h); 
+        }
+
     </script>
 
 </head>
@@ -58,12 +116,19 @@
                 </div> 
             </form>
             <xblock>
-	            <button class="layui-btn layui-btn-danger" onclick="delAll()">
+	            <button class="layui-btn layui-btn-danger" onclick="deleteMultiCrop()">
 	            	<i class="layui-icon">&#xe640;</i>批量删除
 	            </button>
-	            <button class="layui-btn" onclick="member_add('添加用户','member-add.html','600','500')">
+	            <button class="layui-btn" onclick="addCrop('添加作物','${ctx}/crop-add.jsp','600','500')">
 	            	<i class="layui-icon">&#xe608;</i>添加
 	            </button>
+	            <a href="${ctx}/admin_crop/findCropPage?accout=${param.name}&&pageNumber=${cropPage.pageNumber}&&pageSize=${cropPage.pageSize}&&exist=1">
+            		<button class="layui-btn" style="margin-left:11px;">
+            			<i class="layui-icon">
+            				<img style="width:20px;height:20px;margin-top:5px" src="${ctx}/images/save.png"/>
+            			</i>刷新
+            		</button>
+            	</a>
 	            <span class="x-right" style="line-height:40px">共有数据：${cropPage.totalRow} 条</span>
             </xblock>
             <table class="layui-table">
@@ -86,7 +151,7 @@
                 <tbody align="center">
                 	<c:forEach var="cropPage" items="${cropPage.list}">
 	                    <tr>
-	                        <td><input type="checkbox" value="1" name=""></td>
+	                        <td><input type="checkbox" value="${cropPage.id}" name="checkBox"></td>
 	                        <td>${cropPage.id}</td>
 	                        <td>${cropPage.name}</td>
 	                        <td>${cropPage.price}</td>
@@ -100,10 +165,10 @@
 	                        	<span class="layui-btn layui-btn-normal layui-btn-mini">存在</span>
 	                        </td>
 	                        <td class="td-manage" align="center">
-	                            <a style="text-decoration:none"  onclick="member_password('修改','member-password.html','10001','600','400')" href="javascript:;" title="修改">
-	                                <i class="layui-icon">&#xe631;</i>
+	                            <a style="text-decoration:none"  onclick="getUpdateCropInfo(${cropPage.id},'${ctx}/crop-edit.jsp')" href="javascript:;" title="修改">
+	                                <i class="layui-icon">&#xe642;</i>
 	                            </a>
-	                            <a title="删除" href="javascript:;" onclick="member_del(this,'1')" style="text-decoration:none">
+	                            <a title="删除" href="javascript:;" onclick="deleteOneCrop(${cropPage.id})" style="text-decoration:none">
 	                                <i class="layui-icon">&#xe640;</i>
 	                            </a>
 	                        </td>
@@ -215,13 +280,6 @@
           
         });
 
-        //批量删除提交
-         function delAll () {
-            layer.confirm('确认要删除吗？',function(index){
-                //捉到所有被选中的，发异步进行删除
-                layer.msg('删除成功', {icon: 1});
-            });
-         }
          /*用户-添加*/
         function member_add(title,url,w,h){
             x_admin_show(title,url,w,h);
@@ -252,22 +310,7 @@
                 layer.msg('已启用!',{icon: 6,time:1000});
             });
         }
-        // 用户-编辑
-        function member_edit (title,url,id,w,h) {
-            x_admin_show(title,url,w,h); 
-        }
-        /*密码-修改*/
-        function member_password(title,url,id,w,h){
-            x_admin_show(title,url,w,h);  
-        }
-        /*用户-删除*/
-        function member_del(obj,id){
-            layer.confirm('确认要删除吗？',function(index){
-                //发异步删除数据
-                $(obj).parents("tr").remove();
-                layer.msg('已删除!',{icon:1,time:1000});
-            });
-        }
+        
         </script>
         <script>
         //百度统计可去掉

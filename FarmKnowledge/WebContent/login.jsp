@@ -22,15 +22,15 @@
     		var accout = $("#accout").val();
     		var password = $("#password").val();
     		if(accout == "" || password == ""){
-    			alert('输入框不能为空');
+    			layer.msg('输入框不能为空');
     		}else{
 	    		$.post("${ctx}/admin/login",{"accout":accout,"password":password},function(data){
 	    			if(data == "succeed"){
 	    				window.location.href="${ctx}/index.jsp";
 	    			}else if(data == "fail"){
-	    				alert('账号或密码错误');
+	    				layer.msg('账号或密码错误');
 	    			}else if(data == "notExist"){
-	    				alert('管理员账号不存在');
+	    				layer.msg('管理员账号不存在');
 	    			}
 	    		}) 
     		}

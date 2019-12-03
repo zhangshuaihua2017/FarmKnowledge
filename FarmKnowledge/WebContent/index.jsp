@@ -16,6 +16,12 @@
     <script src="${ctx}/lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="${ctx}/js/xadmin.js"></script>
     
+    <script>
+    	if("" == "${admin.accout}"){
+    		window.location.href="${ctx}/login.jsp";
+    	}
+    </script>
+    
 </head>
 <body>
     <!-- 顶部开始 -->

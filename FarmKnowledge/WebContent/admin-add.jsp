@@ -15,31 +15,42 @@
     <script type="text/javascript" src="https://cdn.bootcss.com/Swiper/3.4.2/js/swiper.jquery.min.js"></script>
     <script src="${ctx}/lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="${ctx}/js/xadmin.js"></script>
-    
-    <script type="text/javascript">
+
+	<script>
 		if("" == "${admin.accout}"){
 			window.location.href="${ctx}/login.jsp";
 		}
-    	//修改用户信息
-    	function updateUser(){
-    		var newAccout = $("#accout").val();
-    		var nickName = $("#nickName").val();
-    		var photo = $("#photo").val();
-    		if(newAccout == "" || nickName == "" || photo == ""){
+		//添加管理员信息
+		function addAdmin(){
+			var accout = $("#accout").val();
+    		var password = $("#password").val();
+    		var testPassword = $("#testPassword").val();
+    		if(accout == "" || password == "" || testPassword == ""){
     			layer.msg('输入框不能为空');
     		}else{
-	    		$.post("${ctx}/admin_user/updateUser",{"oldAccout":"${user.accout}","newAccout":newAccout,"nickName":nickName,"photo":photo},function(data){
-	    			if(data == "succeed"){
-						x_admin_close();
-	    			}else if(data == "fail"){
-	    				layer.msg('修改失败');
-	    			}else if(data == "already"){
-	    				layer.msg('该账号已存在');
-	    			}
-	    	 	}) 
+				if(password == testPassword){
+					$.post("${ctx}/admin/addAdmin",{"accout":accout,"password":password},function(data){
+						if(data == "succeed"){
+							x_admin_close();
+		    			}else if(data == "fail"){
+		    				layer.msg('添加失败');
+		    			}else{
+		    				layer.msg('该管理员账号已存在');
+		    			}
+		    		}) 
+				}else{
+					layer.msg('两次输入密码不一致');
+				}
     		}
-    	}
-    </script>
+		}
+		
+		//关闭弹出框口
+		function x_admin_close(){
+		    var index = parent.layer.getFrameIndex(window.name);
+		    parent.layer.close(index);
+		}
+		
+	</script>
 
 </head>
 <body>
@@ -49,51 +60,39 @@
         <div class="page-content">
           <div class="content">
             <!-- 右侧内容框架，更改从这里开始 -->
-            <form class="layui-form" action="javascript:updateUser()">
-                <div class="layui-form-item">
-                   <label for="L_username" class="layui-form-label">
-                    	<font color="red">*</font>账号
+            <form class="layui-form" action="javascript:addAdmin()">
+            	<div class="layui-form-item">
+                    <label for="L_pass" class="layui-form-label">
+                        	<font color="red">*</font>账号
                     </label>
                     <div class="layui-input-inline">
-                        <input id="accout" type="text" id="L_username" name="username" required lay-verify="required"
-                        autocomplete="off" class="layui-input" value="${user.accout}">
+                        <input type="text" id="accout" name="pass" required="" lay-verify="pass"
+                        autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label for="L_username" class="layui-form-label">
-                    	<font color="red">*</font>名称
+                        <font color="red">*</font>密码
                     </label>
                     <div class="layui-input-inline">
-                        <input id="nickName" type="text" id="L_username" name="username" required lay-verify="required"
-                        autocomplete="off" class="layui-input" value="${user.nickName}">
+                        <input type="password" id="password" name="username" required="" lay-verify="nikename"
+                        autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label for="L_city" class="layui-form-label">
-                    	<font color="red">*</font>头像
+                    <label for="L_pass" class="layui-form-label">
+                        <font color="red">*</font>确认密码
                     </label>
                     <div class="layui-input-inline">
-                        <input id="photo" type="text" id="L_city" name="city" autocomplete="off" 
-                        class="layui-input" value="${user.photo}">
-                    </div>
-                    <div class="layui-form-mid layui-word-aux">
-                    	*头像地址
-                    </div>
-                </div>
-                <div class="layui-form-item layui-form-text">
-                    <label for="L_sign" class="layui-form-label">
-                    	签名
-                    </label>
-                    <div class="layui-input-block">
-                        <textarea placeholder="随便写些什么刷下存在感" id="L_sign" name="sign" autocomplete="off"
-                        class="layui-textarea" style="height: 80px;"></textarea>
+                        <input type="password" id="testPassword" name="pass" required="" lay-verify="pass"
+                        autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label for="L_sign" class="layui-form-label">
+                    <label for="L_repass" class="layui-form-label">
                     </label>
-                    <button class="layui-btn" key="set-mine" lay-filter="save" lay-submit>
-                    	 保存          
+                    <button  class="layui-btn" lay-filter="add" lay-submit="">
+                    	添加
                     </button>
                 </div>
             </form>

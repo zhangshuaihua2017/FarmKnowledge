@@ -17,22 +17,25 @@
     <script type="text/javascript" src="${ctx}/js/xadmin.js"></script>
 
 	<script>
+		if("" == "${admin.accout}"){
+			window.location.href="${ctx}/login.jsp";
+		}
 		//添加用户信息
 		function addUser(){
 			var openId = $("#openId").val();
     		var nickName = $("#nickName").val();
     		var photo = $("#photo").val();
     		var type = $("input[name='loginRadio']:checked").val();
-    		if(openId == "" || name == "" || photo == "" || type == ""){
-    			alert('输入框不能为空');
+    		if(openId == "" || nickName == "" || photo == "" || type == ""){
+    			layer.msg('输入框不能为空');
     		}else{
 				$.post("${ctx}/admin_user/addUser",{"openId":openId,"nickName":nickName,"photo":photo,"type":type},function(data){
 					if(data == "succeed"){
 						x_admin_close();
 	    			}else if(data == "fail"){
-	    				alert('添加失败');
+	    				layer.msg('添加失败');
 	    			}else if(data == "already"){
-	    				alert('该授权Id已存在');
+	    				layer.msg('该授权Id已存在');
 	    			}
 	    		}) 
     		}
@@ -84,7 +87,7 @@
                         autocomplete="off" class="layui-input">
                     </div>
                     <div class="layui-form-mid layui-word-aux">
-                    	*头像的URL
+                    	*头像地址
                     </div>
                 </div>
                 <div class="layui-form-item">

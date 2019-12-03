@@ -36,7 +36,7 @@
 	    			if(data == "succeed"){
 	    				window.location.href="${ctx}/admin_user/findUserPage?exist=0";
 	    			}else if(data == "fail"){
-	    				alert('恢复失败');
+	    				layer.msg('恢复失败');
 	    			}
 	    		})    
             });
@@ -57,11 +57,11 @@
 			    	 	 if(data == "succeed"){
 			    			 window.location.href="${ctx}/admin_user/findUserPage?exist=0";
 			    		 }else if(data == "fail"){
-			    			 alert('删除失败');
+			    			 layer.msg('恢复失败');
 			    		 }
 		    	    }) 
             	}else{
-            		window.location.href="${ctx}/admin_user/findUserPage?exist=0";
+            		layer.msg('恢复不能为空');
             	}
             });
          }
@@ -73,7 +73,7 @@
 	    			if(data == "succeed"){
 	    				window.location.href="${ctx}/admin_user/findUserPage?exist=0";
 	    			}else if(data == "fail"){
-	    				alert('删除失败');
+	    				layer.msg('删除失败');
 	    			}
 	    		}) 
             });

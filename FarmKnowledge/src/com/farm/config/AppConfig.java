@@ -35,14 +35,12 @@ public class AppConfig extends JFinalConfig {
 		me.setDevMode(true); //开发者模式
 		me.setViewType(ViewType.JSP); 
 		me.setError404View("/404.jsp"); 
-
 	}
 
 	@Override
 	public void configRoute(Routes me) {
 		me.add(new FrontRoutes()); //前端
         me.add(new AdminRoutes()); //后端
-
 	}
 
 	@Override

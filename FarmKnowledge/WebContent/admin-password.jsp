@@ -15,35 +15,35 @@
     <script type="text/javascript" src="https://cdn.bootcss.com/Swiper/3.4.2/js/swiper.jquery.min.js"></script>
     <script src="${ctx}/lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="${ctx}/js/xadmin.js"></script>
-
-	<script>
-		//添加用户信息
-		function addUser(){
-			var openId = $("#openId").val();
-    		var nickName = $("#nickName").val();
-    		var photo = $("#photo").val();
-    		var type = $("input[name='loginRadio']:checked").val();
-    		if(openId == "" || nickName == "" || photo == "" || type == ""){
+    
+    <script type="text/javascript">
+    	//修改管理员信息
+    	function updateAdmin(){
+    		var oldPassword = $("#oldPassword").val();
+    		var newPassword = $("#newPassword").val();
+    		var testPassword = $("#testPassword").val();
+    		if(oldPassword == "" || newPassword == "" || testPassword == ""){
     			layer.msg('输入框不能为空');
     		}else{
-				$.post("${ctx}/admin_user/addUser",{"openId":openId,"nickName":nickName,"photo":photo,"type":type},function(data){
-					if(data == "succeed"){
-						x_admin_close();
-	    			}else if(data == "fail"){
-	    				layer.msg('添加失败');
-	    			}else if(data == "already"){
-	    				layer.msg('该授权Id已存在');
+	    		if(oldPassword == "${adminInfo.password}"){
+	    			if(newPassword == testPassword){
+	    				$.post("${ctx}/admin/updateAdminPassword",{"accout":"${adminInfo.accout}","password":newPassword},function(data){
+			    			if(data == "succeed"){
+								x_admin_close();
+			    			}else if(data == "fail"){
+			    				layer.msg('修改失败');
+			    			}
+			    	 	}) 
+	    			}else{
+	    				layer.msg('两次输入密码不一致');
 	    			}
-	    		}) 
-    		}
-		}
-		
-		//关闭弹出框口
-		function x_admin_close(){
-		    var index = parent.layer.getFrameIndex(window.name);
-		    parent.layer.close(index);
-		}
-	</script>
+	    		}else{
+	    			layer.msg('旧密码错误');
+	    		}
+	    	}
+    	}
+    	
+    </script>
 
 </head>
 <body>
@@ -53,56 +53,39 @@
         <div class="page-content">
           <div class="content">
             <!-- 右侧内容框架，更改从这里开始 -->
-            <form class="layui-form" action="javascript:addUser()">
-            	<div class="layui-form-item">
-                    <label for="L_pass" class="layui-form-label">
-                        	<font color="red">*</font>授权Id
-                    </label>
-                    <div class="layui-input-inline">
-                        <input type="text" id="openId" name="pass" required="" lay-verify="pass"
-                        autocomplete="off" class="layui-input">
-                    </div>
-                    <div class="layui-form-mid layui-word-aux">
-                    	 *将会成为您授权登陆的唯一认证
-                    </div>
-                </div>
+            <form class="layui-form" action="javascript:updateAdmin()">
                 <div class="layui-form-item">
-                    <label for="L_username" class="layui-form-label">
-                        <font color="red">*</font>名称
+                    <label for="L_pass" class="layui-form-label">
+                        	<font color="red">*</font>旧密码
                     </label>
                     <div class="layui-input-inline">
-                        <input type="text" id="nickName" name="username" required="" lay-verify="nikename"
+                        <input type="password" id="oldPassword" name="pass" required="" lay-verify="pass"
                         autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label for="L_pass" class="layui-form-label">
-                        <font color="red">*</font>头像
+                        	<font color="red">*</font>新密码
                     </label>
                     <div class="layui-input-inline">
-                        <input type="text" id="photo" name="pass" required="" lay-verify="pass"
+                        <input type="password" id="newPassword" name="pass" required="" lay-verify="pass"
                         autocomplete="off" class="layui-input">
                     </div>
-                    <div class="layui-form-mid layui-word-aux">
-                    	*头像地址
+                </div>
+                <div class="layui-form-item">
+                    <label for="L_pass" class="layui-form-label">
+                        	<font color="red">*</font>确认密码
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="password" id="testPassword" name="pass" required="" lay-verify="pass"
+                        autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label for="L_repass" class="layui-form-label">
-                        <font color="red">*</font>登陆类型
+                    <label for="L_sign" class="layui-form-label">
                     </label>
-                    <div class="layui-inline">
-                        <div class="layui-input-inline">
-                            <input type="radio" name="loginRadio" value="QQ" checked title="QQ">
-                            <input type="radio" name="loginRadio" value="微信" title="微信">
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label for="L_repass" class="layui-form-label">
-                    </label>
-                    <button  class="layui-btn" lay-filter="add" lay-submit="">
-                    	添加
+                    <button class="layui-btn" key="set-mine" lay-filter="save" lay-submit>
+                    	 保存          
                     </button>
                 </div>
             </form>

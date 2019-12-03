@@ -36,7 +36,7 @@
 	    			if(data == "succeed"){
 	    				window.location.href="${ctx}/admin_user/findUserPage?exist=1";
 	    			}else if(data == "fail"){
-	    				alert('删除失败');
+	    				layer.msg('删除失败');
 	    			}
 	    		})                
             });   
@@ -57,11 +57,11 @@
 		    			if(data == "succeed"){
 		    				window.location.href="${ctx}/admin_user/findUserPage?exist=1";
 		    			}else if(data == "fail"){
-		    				alert('删除失败');
+		    				layer.msg('删除失败');
 		    			}
 		    		}) 
             	}else{
-            		window.location.href="${ctx}/admin_user/findUserPage?exist=1";
+            		layer.msg('删除不能为空');
             	}
             });
         }
@@ -71,20 +71,18 @@
             x_admin_show(title,url,w,h);
         }
         
-		 //根据用户id获取到要修改的用户信息（账号、别名、头像）
-		 function getUpdateUserInfo(id,path){
+		//根据用户id获取到要修改的用户信息（账号、别名、头像）
+		function getUpdateUserInfo(id,path){
 			 $.post("${ctx}/admin_user/getUpdateUserInfo",{"id":id},function(data){
 			 	updateUser('编辑',path,'600','400');
-	    	 }) 
-		 }
+		     }) 
+	 	}
    
-        
      	//修改用户信息
         function updateUser (title,url,w,h) {
             x_admin_show(title,url,w,h); 
         }
-     	
-        
+     	     
     </script>
    
 </head>
@@ -121,7 +119,7 @@
             	<button class="layui-btn" onclick="addUser('添加用户','${ctx}/member-add.jsp','600','500')">
             		<i class="layui-icon">&#xe608;</i>添加
             	</button>
-            	<a href="${ctx}/admin_user/findUserPage?exist=1">
+            	<a href="${ctx}/admin_user/findUserPage?accout=${param.accout}&&pageNumber=${userPage.pageNumber}&&pageSize=${userPage.pageSize}&&exist=1">
             		<button class="layui-btn" style="margin-left:11px;">
             			<i class="layui-icon">
             				<img style="width:20px;height:20px;margin-top:5px" src="${ctx}/images/save.png"/>
@@ -174,7 +172,7 @@
 	                        </td>
 	                        <td class="td-manage" align="center">
 	                            <a style="text-decoration:none"  onclick="getUpdateUserInfo(${userPage.id},'${ctx}/member-edit.jsp')" href="javascript:;" title="修改">
-	                                <i class="layui-icon">&#xe631;</i>
+	                                <i class="layui-icon">&#xe642;</i>
 	                            </a>
 	                            <a title="删除" href="javascript:;" onclick="deleteOneUser(${userPage.id})" style="text-decoration:none">
 	                                <i class="layui-icon">&#xe640;</i>
@@ -314,10 +312,7 @@
                 layer.msg('已启用!',{icon: 6,time:1000});
             });
         }
-        /*密码-修改*/
-        function member_password(title,url,id,w,h){
-            x_admin_show(title,url,w,h);  
-        }
+        
         </script>
         <script>
         //百度统计可去掉

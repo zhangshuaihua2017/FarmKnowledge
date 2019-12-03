@@ -52,17 +52,13 @@
 			   }
 		    }
             layer.confirm('确认要批量恢复吗？',function(index){
-            	if(recoveryStr != ""){
-	        	    $.post("${ctx}/admin_user/recoveryMultiUser",{"recoveryStr":recoveryStr},function(data){
-			    	 	 if(data == "succeed"){
-			    			 window.location.href="${ctx}/admin_user/findUserPage?exist=0";
-			    		 }else if(data == "fail"){
-			    			 alert('删除失败');
-			    		 }
-		    	    }) 
-            	}else{
-            		window.location.href="${ctx}/admin_user/findUserPage?exist=0";
-            	}
+        	   $.post("${ctx}/admin_user/recoveryMultiUser",{"recoveryStr":recoveryStr},function(data){
+		    	 	 if(data == "succeed"){
+		    			 window.location.href="${ctx}/admin_user/findUserPage?exist=0";
+		    		 }else if(data == "fail"){
+		    			 alert('删除失败');
+		    		 }
+	    	   }) 
             });
          }
         

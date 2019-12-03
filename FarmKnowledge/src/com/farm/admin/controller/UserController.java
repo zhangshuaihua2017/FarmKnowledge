@@ -3,7 +3,6 @@ package com.farm.admin.controller;
 import java.sql.SQLException;
 
 import com.farm.model.User;
-import com.farm.user.dao.UserDao;
 import com.farm.user.service.UserService;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
@@ -127,53 +126,4 @@ public class UserController extends Controller{
 		}
 	}
 	
-	//添加用户信息（授权id、账号、别名、头像、登陆类型）
-	public void addUser() {
-		String openId = get("openId");
-		String nickName = get("nickName");
-		String photo = get("photo");
-		String type = get("type");
-		
-		UserService service = new UserService();
-		if(!service.isExistUserByOpenId(openId)) { //不存在该用户，可以添加
-			boolean succeed = service.addUser(openId, nickName, photo, type);
-			if(succeed == true) {
-				renderText("succeed");
-			}else {
-				renderText("fail");
-			}
-		}else { //已存在该用户，不可添加
-			renderText("already");
-		}
-		
-	}
-
-	//根据用户id获取到要修改的用户信息（账号、别名、头像）
-	public void getUpdateUserInfo() {
-		int id = getInt("id");
-		User user = new UserService().getUpdateUserInfo(id);
-		setSessionAttr("user", user);
-		renderText("succeed");
-	}
-	
-	//修改用户信息（账号、别名、头像）
-	public void updateUser() {
-		int id = getInt("id");
-		String accout = get("accout");
-		String nickName = get("nickName");
-		String photo = get("photo");
-		
-		UserService service = new UserService();
-		if(!service.isExistUserByAccout(accout)) { //不存在该账号，可以修改
-			boolean succeed = service.updateUser(id, accout, nickName, photo);
-			if(succeed == true) {
-				renderText("succeed");
-			}else {
-				renderText("fail");
-			}
-		}else { //已存在该账号，不可修改
-			renderText("already");
-		}
-			
-	}
 }

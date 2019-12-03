@@ -15,19 +15,19 @@ public class UserService {
         return new UserDao().findUserByOpenId(openId);
     }
 	
-	//添加用户信息（授权id、账号、别名、头像、登陆类型）（User表、UserAuthority表）
-	public boolean addUser(String openId, String nickName, String photo,String type){
+	//添加新用户（User表、UserAuthority表）
+	public boolean addUser(String openId, String nickName, String photo){
 		boolean succeed = Db.tx(new IAtom() {
 			@Override
 			public boolean run() throws SQLException {
 				UserDao userDao = new UserDao();
 				
 				//user表插入别名、头像
-				boolean a1 = userDao.addUser(generateAccount(), nickName, photo);
+				boolean a1 = userDao.addUser(nickName, photo);
 				//获得user表刚插入数据的userId
 				int userId = userDao.getLastUserId();
 				//UserAuthority表内插入userId、openId、token
-				boolean a2 = userDao.addUserAuthority(userId, openId, type);
+				boolean a2 = userDao.addUserAuthority(userId, openId);
 				
 				if(a1 == true && a2 == true) { //添加成功
 					return true;
@@ -38,15 +38,29 @@ public class UserService {
 		});
 		return succeed;
     }
-	
+	//添加浇水，施肥（User表）
+	public void addWaterAndFer(int id,int water, int fertilizer) {
+		new UserDao().addWaterAndFertilizer(id, water, fertilizer);
+	}
+	//添加用户经验，金币(User表）
+	public void addEandM(int id,int ex,int money) {
+		new UserDao().addExandMoney(id, ex, money);
+	}
+	//减少浇水（User表）
+	public void lessW(int id) {
+		new UserDao().lessWater(id);
+	}
+	//减少施肥（User表）
+	public void lessF(int id) {
+		new UserDao().lessFertilizer(id);
+	}
+	public int findUcId(int userId,String landNumber) {
+		return new UserDao().findUcIdByLand(userId, landNumber);
+	}
+
 	//根据openId判断UserAuthority表内是否存在该用户（UserAuthority表）
-	public boolean isExistUserByOpenId(String openId){
-        return new UserDao().isExistUserByOpenId(openId);
-    }
-	
-	//根据账号判断User表内是否存在该用户（User表）
-	public boolean isExistUserByAccout(String accout){
-        return new UserDao().isExistUserByAccout(accout);
+	public boolean isExistUser(String openId){
+        return new UserDao().isExistUser(openId);
     }
 
 	//查询User表内用户信息（User表）
@@ -69,26 +83,4 @@ public class UserService {
 		return new UserDao().deleteThoroughUser(userId);
 	}
 	
-	//生成账号
-	public String generateAccount() {
-		String accout = "";
-		do{
-			accout = "";
-			for(int n = 1;n < 9;n++) {
-				accout += (int)(Math.random()*10);
-			}
-		}while(isExistUserByAccout(accout));
-		return accout;
-	}
-
-	//根据用户id获取到要修改的用户信息（账号、别名、头像）
-	public User getUpdateUserInfo(int id) {
-		return new UserDao().getUpdateUserInfo(id);
-	}
-	
-	//修改用户信息（账号、别名、头像）
-	public boolean updateUser(int id, String accout, String nickName, String photo) {
-		return new UserDao().updateUser(id, accout, nickName, photo);
-	}
-
 }

@@ -6,9 +6,9 @@ import org.json.JSONObject;
 
 import com.farm.model.User;
 import com.farm.user.service.UserService;
+import com.farm.usercrop.service.UserCropService;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.HttpKit;
-import com.jfinal.template.expr.ast.Id;
 
 public class UserController extends Controller{
 	
@@ -22,11 +22,11 @@ public class UserController extends Controller{
 		String photo = URLDecoder.decode(jsonObject.getString("photo"));
 		System.out.println(jsonObject.toString());
 		UserService service = new UserService();
-		if(service.isExistUserByOpenId(openId)) { //已存在该用户，查询用户信息
+		if(service.isExistUser(openId)) { //已存在该用户，查询用户信息
 			User user = service.findUserByOpenId(openId);
 			renderJson(user);
 		}else { 						  //不存在该用户，添加用户
-			boolean addUser = service.addUser(openId, nickName, photo, "QQ");
+			boolean addUser = service.addUser(openId, nickName, photo);
 			if(addUser) { 				  //添加新用户成功
 				User user = service.findUserByOpenId(openId);
 				renderJson(user);
@@ -36,13 +36,30 @@ public class UserController extends Controller{
 		}
 	}
 	
-	//根据openId查询用户信息
-	public void findByOpenId() {
-		String jsonStr =  HttpKit.readData(getRequest());
-		JSONObject jsonObject = new JSONObject(jsonStr);
-		String openId = jsonObject.getString("openId");
-		
-		User user = new UserService().findUserByOpenId(openId);
-		renderJson(user);
+	//增加浇水.施肥次数（userId，数量）
+	public void addUserWater(int id,int water,int fertilizer) {
+		new UserService().addWaterAndFer(id, water, fertilizer);
+	}
+	//减少浇水次数（userId）
+	public void lessUserWater(int id) {
+		new UserService().lessW(id);
+	}
+	//减少施肥次数（userId）
+	public void lessUserFertilizer(int id) {
+		new UserService().lessF(id);
+	}
+	
+	//浇水（userId,landNumber ）
+	public void waterC(int userId,String landNumber) {
+		new UserCropService().waterCr(userId, landNumber);
+	}
+	//施肥
+	public void fertilizeC(int userId,String landNumber) {
+		new UserCropService().fertilizerCr(userId, landNumber);
+	}
+	
+	//收获
+	public void harvest(int userId, String landNumber) {
+		new UserCropService().getC(userId, landNumber);
 	}
 }

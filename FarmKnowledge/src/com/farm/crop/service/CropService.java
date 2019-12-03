@@ -1,5 +1,7 @@
 package com.farm.crop.service;
 
+import java.util.List;
+
 import com.farm.crop.dao.CropDao;
 import com.farm.model.Crop;
 import com.jfinal.plugin.activerecord.Page;
@@ -39,5 +41,10 @@ public class CropService {
 	//修改作物信息
 	public boolean updateCrop(int id, String name, int price, String img1, String img2, String img3, int matureTime, int value, int experience) {
 		return new CropDao().updateCrop(id, name, price, img1, img2, img3, matureTime, value, experience);
+	}
+
+	//查询Crop表经验，金币（Crop表）
+	public int[] findEandM(int id) {
+		return new CropDao().findCropExAndMoney(id);
 	}
 }

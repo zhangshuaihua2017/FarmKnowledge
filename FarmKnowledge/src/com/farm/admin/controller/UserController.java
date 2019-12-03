@@ -165,7 +165,7 @@ public class UserController extends Controller{
 			renderText("fail");
 		}
 	}
-	
+
 	//添加用户信息（授权id、账号、别名、头像、登陆类型）
 	public void addUser() {
 		String openId = get("openId");

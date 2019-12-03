@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <!doctype html>
@@ -82,7 +82,7 @@
         function updateUser (title,url,w,h) {
             x_admin_show(title,url,w,h); 
         }
-     	     
+    	     
     </script>
    
 </head>
@@ -116,7 +116,7 @@
             	<button class="layui-btn layui-btn-danger" onClick="deleteMultiUser()">
             		<i class="layui-icon">&#xe640;</i>批量删除
             	</button>
-            	<button class="layui-btn" onclick="addUser('添加用户','${ctx}/member-add.jsp','600','500')">
+            	<button class="layui-btn" onclick="member_add('添加用户','member-add.html','600','500')">
             		<i class="layui-icon">&#xe608;</i>添加
             	</button>
             	<a href="${ctx}/admin_user/findUserPage?accout=${param.accout}&&pageNumber=${userPage.pageNumber}&&pageSize=${userPage.pageSize}&&exist=1">
@@ -286,6 +286,10 @@
           
         });
 
+         /*用户-添加*/
+        function member_add(title,url,w,h){
+            x_admin_show(title,url,w,h);
+        }
         /*用户-查看*/
         function member_show(title,url,id,w,h){
             x_admin_show(title,url,w,h);
@@ -312,7 +316,6 @@
                 layer.msg('已启用!',{icon: 6,time:1000});
             });
         }
-        
         </script>
         <script>
         //百度统计可去掉

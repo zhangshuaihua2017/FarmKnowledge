@@ -17,9 +17,6 @@
     <script type="text/javascript" src="${ctx}/js/xadmin.js"></script>
 
 	<script>
-		if("" == "${admin.accout}"){
-			window.location.href="${ctx}/login.jsp";
-		}
 		//添加用户信息
 		function addUser(){
 			var openId = $("#openId").val();

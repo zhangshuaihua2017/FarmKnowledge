@@ -17,9 +17,6 @@
     <script type="text/javascript" src="${ctx}/js/xadmin.js"></script>
 
 	<script>
-		if("" == "${admin.accout}"){
-			window.location.href="${ctx}/login.jsp";
-		}
 		//添加管理员信息
 		function addAdmin(){
 			var accout = $("#accout").val();

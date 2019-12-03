@@ -17,9 +17,6 @@
     <script type="text/javascript" src="${ctx}/js/xadmin.js"></script>
     
     <script type="text/javascript">
-		if("" == "${admin.accout}"){
-			window.location.href="${ctx}/login.jsp";
-		}
     	//修改作物信息
     	function updateCrop(){
     		var name = $("#name").val();

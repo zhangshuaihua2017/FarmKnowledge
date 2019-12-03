@@ -17,9 +17,6 @@
     <script type="text/javascript" src="${ctx}/js/xadmin.js"></script>
     
     <script type="text/javascript">
-		if("" == "${admin.accout}"){
-			window.location.href="${ctx}/login.jsp";
-		}
     	//修改用户信息
     	function updateUser(){
     		var newAccout = $("#accout").val();

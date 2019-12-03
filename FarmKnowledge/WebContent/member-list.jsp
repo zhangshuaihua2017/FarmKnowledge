@@ -23,9 +23,6 @@
     </style>
     
     <script>
-		if("" == "${admin.accout}"){
-			window.location.href="${ctx}/login.jsp";
-		}
 		//初始化左侧菜单（用户管理）
 		window.onload = function(){
 			$("#initUserManager").attr("class","sub-menu opened");

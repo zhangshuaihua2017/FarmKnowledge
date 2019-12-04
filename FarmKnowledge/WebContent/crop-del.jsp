@@ -16,68 +16,12 @@
     <script src="${ctx}/lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="${ctx}/js/xadmin.js"></script>
 
-	<style>
-    	.page{
-    		margin-right:25px;
-    	}
-    </style>
-
 	<script>
 		//初始化左侧菜单（作物管理）
 		window.onload = function(){
 			$("#initCropManager").attr("class","sub-menu opened");
 			$("#initCropManager2").attr("class","current");
 		}
-		
-		//恢复单个作物信息
-        function recoveryOneCrop(id){
-            layer.confirm('确认要恢复吗？',function(index){
-            	$.post("${ctx}/admin_crop/recoveryOneCrop",{"id":id},function(data){
-	    			if(data == "succeed"){
-	    				window.location.href="${ctx}/admin_crop/findCropPage?exist=0";
-	    			}else if(data == "fail"){
-	    				layer.msg('恢复失败');
-	    			}
-	    		})    
-            });
-        }
-		
-        //恢复批量作物信息
-        function recoveryMultiCrop() {
-            var arrRecovery = document.getElementsByName("checkBox");
-            var recoveryStr="";
-		    for(i in arrRecovery){
-			   if(arrRecovery[i].checked){
-				   recoveryStr = recoveryStr + arrRecovery[i].value + ",";
-			   }
-		    }
-            layer.confirm('确认要批量恢复吗？',function(index){
-            	if(recoveryStr != ""){
-	        	    $.post("${ctx}/admin_crop/recoveryMultiCrop",{"recoveryStr":recoveryStr},function(data){
-			    	 	 if(data == "succeed"){
-			    			 window.location.href="${ctx}/admin_crop/findCropPage?exist=0";
-			    		 }else if(data == "fail"){
-			    			 layer.msg('恢复失败');
-			    		 }
-		    	    }) 
-            	}else{
-            		layer.msg('恢复不能为空');
-            	}
-            });
-         }
-        
-      	//彻底删除作物信息
-        function deleteThoroughCrop(id){
-            layer.confirm('彻底删除无法恢复，确认要删除数据吗？',function(index){
-            	$.post("${ctx}/admin_crop/deleteThoroughCrop",{"id":id},function(data){
-	    			if(data == "succeed"){
-	    				window.location.href="${ctx}/admin_crop/findCropPage?exist=0";
-	    			}else if(data == "fail"){
-	    				layer.msg('删除失败');
-	    			}
-	    		}) 
-            });
-        }   
     </script>
 
 </head>
@@ -98,8 +42,7 @@
                 <div class="layui-form-pane" style="text-align: center;">
                   <div class="layui-form-item" style="display: inline-block;">
                     <div class="layui-input-inline">
-                      <input type="text" name="name" placeholder="请输入作物名称" autocomplete="off" class="layui-input" value="${param.name}">
-                      <input type="hidden" name="exist" value="0"/>
+                      <input type="text" name="username" placeholder="请输入作物名称" autocomplete="off" class="layui-input">
                     </div>
                     <div class="layui-input-inline" style="width:80px">
                         <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
@@ -108,10 +51,10 @@
                 </div> 
             </form>
             <xblock>
-	            <button class="layui-btn layui-btn-danger" onclick="recoveryMultiCrop()">
+	            <button class="layui-btn layui-btn-danger" onclick="recoverAll()">
 	          		<i class="layui-icon">&#xe640;</i>批量恢复
 	            </button>
-	            <span class="x-right" style="line-height:40px">共有数据：${cropPage.totalRow} 条</span>
+	            <span class="x-right" style="line-height:40px">共有数据：88 条</span>
 	        </xblock>
             <table class="layui-table">
                 <thead >
@@ -131,86 +74,33 @@
                     </tr>
                 </thead>
                 <tbody align="center">
-                    <c:forEach var="cropPage" items="${cropPage.list}">
-	                    <tr>
-	                        <td><input type="checkbox" value="${cropPage.id}" name="checkBox"></td>
-	                        <td>${cropPage.id}</td>
-	                        <td>${cropPage.name}</td>
-	                        <td>${cropPage.price}</td>
-	                        <td><img style="width:50px;height:50px" src="${cropPage.img1}" /></td>
-	                        <td><img style="width:50px;height:50px" src="${cropPage.img2}" /></td>
-	                        <td><img style="width:50px;height:50px" src="${cropPage.img3}" /></td>
-	                        <td>${cropPage.matureTime}天</td>
-	                        <td>${cropPage.value}金币</td>
-	                        <td>${cropPage.experience}</td>
-	                        <td class="td-status">
-	                        	<span class="layui-btn layui-btn-danger layui-btn-mini">已删除</span>
-	                        </td>
-	                        <td class="td-manage" align="center">
-	                            <a style="text-decoration:none" onclick="recoveryOneCrop(${cropPage.id})" href="javascript:;" title="恢复">
-	                                <i class="layui-icon">&#xe618;</i>
-	                            </a>
-	                            <a title="彻底删除" href="javascript:;" onclick="deleteThoroughCrop(${cropPage.id})" style="text-decoration:none">
-	                                <i class="layui-icon">&#xe640;</i>
-	                            </a>
-	                        </td>
-	                    </tr>
-	            	</c:forEach>
+                    <tr>
+                        <td><input type="checkbox" value="1" name=""></td>
+                        <td>1</td>
+                        <td>玫瑰花</td>
+                        <td>100金币</td>
+                        <td><img style="width:50px;height:50px" src="https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3420024572,1793552629&fm=26&gp=0.jpg" /></td>
+                        <td><img style="width:50px;height:50px" src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3402841371,3026077591&fm=26&gp=0.jpg" /></td>
+                        <td><img style="width:50px;height:50px" src="https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2752334488,1445932567&fm=26&gp=0.jpg" /></td>
+                        <td>5天</td>
+                        <td>1000金币</td>
+                        <td>500</td>
+                        <td class="td-status">
+                        	<span class="layui-btn layui-btn-danger layui-btn-mini">已删除</span>
+                        </td>
+                        <td class="td-manage" align="center">
+                            <a style="text-decoration:none" onclick="member_recover(this,'10001')" href="javascript:;" title="恢复">
+                                <i class="layui-icon">&#xe618;</i>
+                            </a>
+                            <a title="彻底删除" href="javascript:;" onclick="member_unset(this,'1')" style="text-decoration:none">
+                                <i class="layui-icon">&#xe640;</i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
             <!-- 右侧内容框架，更改从这里结束 -->
           </div>
-          <!-- 分页处理开始 -->
-          		<!-- 上一页 -->
-	          	<c:choose>
-	        		<c:when test="${cropPage.pageNumber-1 > 0}">
-	        			<c:set var="prePage" value="${cropPage.pageNumber-1}"></c:set>
-	        		</c:when>
-	        		<c:when test="${cropPage.pageNumber-1 <= 0}">
-	        			<c:set var="prePage" value="1"></c:set>
-	        		</c:when>
-	        	</c:choose>
-	        	<!-- 查询结果不为空 -->
-	          	<c:if test="${cropPage.totalPage != 0}">
-	          		<!-- 下一页 -->
-	          		<c:choose>
-	          			<c:when test="${cropPage.pageNumber+1 <= cropPage.totalPage}">
-	          				<c:set var="nextPage" value="${cropPage.pageNumber+1}"></c:set>
-	          			</c:when>
-	          			<c:when test="${cropPage.pageNumber+1 > cropPage.totalPage}">
-	          				<c:set var="nextPage" value="${cropPage.totalPage}"></c:set>
-	          			</c:when>
-	          		</c:choose>
-	          		<!-- 末页 -->
-	          		<c:set var="lastPage" value="${cropPage.totalPage}"></c:set>
-	          	</c:if>
-	          	<!-- 查询结果为空 -->
-	          	<c:if test="${cropPage.totalPage == 0}">
-	          		<!-- 下一页 -->
-	          		<c:set var="nextPage" value="1"></c:set>
-	          		<!-- 末页 -->
-	          		<c:set var="lastPage" value="1"></c:set>
-	          	</c:if>
-			  <div align="center">
-				<a  class="page" style="margin-left:25px;" href="${ctx}/admin_crop/findCropPage?name=${param.name}&&pageNumber=1&&pageSize=${cropPage.pageSize}&&exist=0">首页</a>
-				<a  class="page" href="${ctx}/admin_crop/findCropPage?name=${param.name}&&pageNumber=${prePage}&&pageSize=${cropPage.pageSize}&&exist=0">上一页</a>
-				<a  class="page" href="${ctx}/admin_crop/findCropPage?name=${param.name}&&pageNumber=${nextPage}&&pageSize=${cropPage.pageSize}&&exist=0">下一页</a>
-				<a  class="page" href="${ctx}/admin_crop/findCropPage?name=${param.name}&&pageNumber=${lastPage}&&pageSize=${cropPage.pageSize}&&exist=0">末页</a>			
-			  </div>
-			  <div align="center" style="margin-top:20px;">
-				<span style="margin-right:10px;">
-					<!-- 查询结果不为空 -->
-					<c:if test="${cropPage.totalPage != 0}">
-						${cropPage.pageNumber}
-					</c:if>
-					<!-- 查询结果为空 -->
-					<c:if test="${cropPage.totalPage == 0}">
-						0
-					</c:if>
-				</span>
-				<span>/</span>
-				<span style="margin-left:10px;">${cropPage.totalPage}</span>
-			  </div>
-		  <!-- 分页处理结束 -->
         </div>
         <!-- 右侧主体结束 -->
     </div>
@@ -269,6 +159,14 @@
                 });
              }
 
+            /*用户-恢复*/
+            function member_recover(obj,id){
+                layer.confirm('确认要恢复吗？',function(index){
+                    //发异步删除数据
+                    $(obj).parents("tr").remove();
+                    layer.msg('已恢复!',{icon:1,time:1000});
+                });
+            }
             /*用户-彻底删除*/
             function member_unset(obj,id){
                 layer.confirm('彻底删除无法恢复，确认要删除数据吗？',function(index){

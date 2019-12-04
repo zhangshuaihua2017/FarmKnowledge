@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!doctype html>
@@ -13,8 +13,8 @@
     <link rel="stylesheet" href="https://cdn.bootcss.com/Swiper/3.4.2/css/swiper.min.css">
     <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.bootcss.com/Swiper/3.4.2/js/swiper.jquery.min.js"></script>
-    <script src="${ctx}/lib/layui/layui.js" charset="utf-8"></script>
-    <script type="text/javascript" src="${ctx}/js/xadmin.js"></script>
+    <script src="./lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/xadmin.js"></script>
     
     <script>
     	//管理员登陆
@@ -22,15 +22,15 @@
     		var accout = $("#accout").val();
     		var password = $("#password").val();
     		if(accout == "" || password == ""){
-    			layer.msg('输入框不能为空');
+    			alert('输入框不能为空');
     		}else{
 	    		$.post("${ctx}/admin/login",{"accout":accout,"password":password},function(data){
 	    			if(data == "succeed"){
 	    				window.location.href="${ctx}/index.jsp";
 	    			}else if(data == "fail"){
-	    				layer.msg('账号或密码错误');
+	    				alert('账号或密码错误');
 	    			}else if(data == "notExist"){
-	    				layer.msg('管理员账号不存在');
+	    				alert('管理员账号不存在');
 	    			}
 	    		}) 
     		}
@@ -47,6 +47,7 @@
                 <label class="layui-form-label login-form"><i class="iconfont">&#xe6b8;</i></label>
                 <div class="layui-input-inline login-inline">
                   <input id="accout" type="text" name="username" lay-verify="required" placeholder="请输入管理员账号" autocomplete="off" class="layui-input">
+                  <c:set var="uName" value="" />
                 </div>
             </div>
             <label class="login-title" for="password">密码</label>

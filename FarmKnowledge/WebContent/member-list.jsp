@@ -36,7 +36,7 @@
 	    			if(data == "succeed"){
 	    				window.location.href="${ctx}/admin_user/findUserPage?exist=1";
 	    			}else if(data == "fail"){
-	    				layer.msg('删除失败');
+	    				alert('删除失败');
 	    			}
 	    		})                
             });   
@@ -52,37 +52,18 @@
 				}
 			}
             layer.confirm('确认要批量删除吗？',function(index){
-            	if(deleteStr != ""){
-	        	    $.post("${ctx}/admin_user/deleteMultiUser",{"deleteStr":deleteStr},function(data){
-		    			if(data == "succeed"){
-		    				window.location.href="${ctx}/admin_user/findUserPage?exist=1";
-		    			}else if(data == "fail"){
-		    				layer.msg('删除失败');
-		    			}
-		    		}) 
-            	}else{
-            		layer.msg('删除不能为空');
-            	}
+        	   $.post("${ctx}/admin_user/deleteMultiUser",{"deleteStr":deleteStr},function(data){
+	    			if(data == "succeed"){
+	    				window.location.href="${ctx}/admin_user/findUserPage?exist=1";
+	    			}else if(data == "fail"){
+	    				alert('删除失败');
+	    			}
+	    		})      
             });
         }
 		
-        //添加用户信息
-        function addUser(title,url,w,h){
-            x_admin_show(title,url,w,h);
-        }
-        
-		//根据用户id获取到要修改的用户信息（账号、别名、头像）
-		function getUpdateUserInfo(id,path){
-			 $.post("${ctx}/admin_user/getUpdateUserInfo",{"id":id},function(data){
-			 	updateUser('编辑',path,'600','400');
-		     }) 
-	 	}
-   
-     	//修改用户信息
-        function updateUser (title,url,w,h) {
-            x_admin_show(title,url,w,h); 
-        }
-     	     
+		
+		
     </script>
    
 </head>
@@ -116,17 +97,9 @@
             	<button class="layui-btn layui-btn-danger" onClick="deleteMultiUser()">
             		<i class="layui-icon">&#xe640;</i>批量删除
             	</button>
-            	<button class="layui-btn" onclick="addUser('添加用户','${ctx}/member-add.jsp','600','500')">
+            	<button class="layui-btn" onclick="member_add('添加用户','member-add.html','600','500')">
             		<i class="layui-icon">&#xe608;</i>添加
-            	</button>
-            	<a href="${ctx}/admin_user/findUserPage?accout=${param.accout}&&pageNumber=${userPage.pageNumber}&&pageSize=${userPage.pageSize}&&exist=1">
-            		<button class="layui-btn" style="margin-left:11px;">
-            			<i class="layui-icon">
-            				<img style="width:20px;height:20px;margin-top:5px" src="${ctx}/images/save.png"/>
-            			</i>刷新
-            		</button>
-            	</a>
-            	<span class="x-right" style="line-height:40px">共有数据：${userPage.totalRow} 条</span>
+            	</button><span class="x-right" style="line-height:40px">共有数据：${userPage.totalRow} 条</span>
             </xblock>
             <table class="layui-table">
                 <thead >
@@ -171,8 +144,8 @@
 	                        	<span class="layui-btn layui-btn-normal layui-btn-mini">存在</span>
 	                        </td>
 	                        <td class="td-manage" align="center">
-	                            <a style="text-decoration:none"  onclick="getUpdateUserInfo(${userPage.id},'${ctx}/member-edit.jsp')" href="javascript:;" title="修改">
-	                                <i class="layui-icon">&#xe642;</i>
+	                            <a style="text-decoration:none"  onclick="member_password('修改','member-password.html','10001','600','400')" href="javascript:;" title="修改">
+	                                <i class="layui-icon">&#xe631;</i>
 	                            </a>
 	                            <a title="删除" href="javascript:;" onclick="deleteOneUser(${userPage.id})" style="text-decoration:none">
 	                                <i class="layui-icon">&#xe640;</i>
@@ -286,6 +259,10 @@
           
         });
 
+         /*用户-添加*/
+        function member_add(title,url,w,h){
+            x_admin_show(title,url,w,h);
+        }
         /*用户-查看*/
         function member_show(title,url,id,w,h){
             x_admin_show(title,url,w,h);
@@ -312,7 +289,14 @@
                 layer.msg('已启用!',{icon: 6,time:1000});
             });
         }
-        
+        // 用户-编辑
+        function member_edit (title,url,id,w,h) {
+            x_admin_show(title,url,w,h); 
+        }
+        /*密码-修改*/
+        function member_password(title,url,id,w,h){
+            x_admin_show(title,url,w,h);  
+        }
         </script>
         <script>
         //百度统计可去掉

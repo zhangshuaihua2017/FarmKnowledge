@@ -36,7 +36,7 @@
 	    			if(data == "succeed"){
 	    				window.location.href="${ctx}/admin_user/findUserPage?exist=0";
 	    			}else if(data == "fail"){
-	    				layer.msg('恢复失败');
+	    				alert('恢复失败');
 	    			}
 	    		})    
             });
@@ -52,17 +52,13 @@
 			   }
 		    }
             layer.confirm('确认要批量恢复吗？',function(index){
-            	if(recoveryStr != ""){
-	        	    $.post("${ctx}/admin_user/recoveryMultiUser",{"recoveryStr":recoveryStr},function(data){
-			    	 	 if(data == "succeed"){
-			    			 window.location.href="${ctx}/admin_user/findUserPage?exist=0";
-			    		 }else if(data == "fail"){
-			    			 layer.msg('恢复失败');
-			    		 }
-		    	    }) 
-            	}else{
-            		layer.msg('恢复不能为空');
-            	}
+        	   $.post("${ctx}/admin_user/recoveryMultiUser",{"recoveryStr":recoveryStr},function(data){
+		    	 	 if(data == "succeed"){
+		    			 window.location.href="${ctx}/admin_user/findUserPage?exist=0";
+		    		 }else if(data == "fail"){
+		    			 alert('删除失败');
+		    		 }
+	    	   }) 
             });
          }
         
@@ -73,7 +69,7 @@
 	    			if(data == "succeed"){
 	    				window.location.href="${ctx}/admin_user/findUserPage?exist=0";
 	    			}else if(data == "fail"){
-	    				layer.msg('删除失败');
+	    				alert('删除失败');
 	    			}
 	    		}) 
             });

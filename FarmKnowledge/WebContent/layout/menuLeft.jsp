@@ -46,7 +46,7 @@
                             </a>
                         </li>
                         <li id="initCropManager2">
-                            <a href="${ctx}/admin_crop/findCropPage?exist=0">
+                            <a href="${ctx}/crop-del.jsp">
                                 <i class="iconfont">&#xe6a7;</i>
                         	作物删除
                             </a>
@@ -67,7 +67,7 @@
                             </a>
                         </li>
                         <li id="initAdminManager2">
-                            <a href="${ctx}/admin/findAdminPage?exist=0">
+                            <a href="${ctx}/admin-del.jsp">
                                 <i class="iconfont">&#xe6a7;</i>
                         	管理员删除
                             </a>

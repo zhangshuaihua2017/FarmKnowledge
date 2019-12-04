@@ -32,9 +32,9 @@
 		//删除单个用户信息
 		function deleteOneUser(id){
 			layer.confirm('确认要删除吗？',function(index){
-				$.post("${ctx}/admin_user/deleteOneUser",{"userId":id},function(data){
+				$.post("${ctx}/admin/user/deleteOneUser",{"userId":id},function(data){
 	    			if(data == "succeed"){
-	    				window.location.href="${ctx}/admin_user/findUserPage?exist=1";
+	    				window.location.href="${ctx}/admin/user/findUserPage?exist=1";
 	    			}else if(data == "fail"){
 	    				alert('删除失败');
 	    			}
@@ -52,18 +52,37 @@
 				}
 			}
             layer.confirm('确认要批量删除吗？',function(index){
-        	   $.post("${ctx}/admin_user/deleteMultiUser",{"deleteStr":deleteStr},function(data){
-	    			if(data == "succeed"){
-	    				window.location.href="${ctx}/admin_user/findUserPage?exist=1";
-	    			}else if(data == "fail"){
-	    				alert('删除失败');
-	    			}
-	    		})      
+            	if(deleteStr != ""){
+	        	    $.post("${ctx}/admin/user/deleteMultiUser",{"deleteStr":deleteStr},function(data){
+		    			if(data == "succeed"){
+		    				window.location.href="${ctx}/admin/user/findUserPage?exist=1";
+		    			}else if(data == "fail"){
+		    				layer.msg('删除失败');
+		    			}
+		    		}) 
+            	}else{
+            		layer.msg('删除不能为空');
+            	}
             });
         }
 		
-		
-		
+        //添加用户信息
+        function addUser(title,url,w,h){
+            x_admin_show(title,url,w,h);
+        }
+        
+		//根据用户id获取到要修改的用户信息（账号、别名、头像）
+		function getUpdateUserInfo(id,path){
+			 $.post("${ctx}/admin/user/getUpdateUserInfo",{"id":id},function(data){
+			 	updateUser('编辑',path,'600','400');
+		     }) 
+	 	}
+   
+     	//修改用户信息
+        function updateUser (title,url,w,h) {
+            x_admin_show(title,url,w,h); 
+        }
+     	     
     </script>
    
 </head>
@@ -80,7 +99,7 @@
         <div class="page-content">
           <div class="content">
             <!-- 右侧内容框架，更改从这里开始 -->
-            <form class="layui-form xbs" action="${ctx}/admin_user/findUserPage">
+            <form class="layui-form xbs" action="${ctx}/admin/user/findUserPage">
                 <div class="layui-form-pane" style="text-align: center;">
                   <div class="layui-form-item" style="display: inline-block;">
                     <div class="layui-input-inline">
@@ -99,7 +118,15 @@
             	</button>
             	<button class="layui-btn" onclick="member_add('添加用户','member-add.html','600','500')">
             		<i class="layui-icon">&#xe608;</i>添加
-            	</button><span class="x-right" style="line-height:40px">共有数据：${userPage.totalRow} 条</span>
+            	</button>
+            	<a href="${ctx}/admin/user/findUserPage?accout=${param.accout}&&pageNumber=${userPage.pageNumber}&&pageSize=${userPage.pageSize}&&exist=1">
+            		<button class="layui-btn" style="margin-left:11px;">
+            			<i class="layui-icon">
+            				<img style="width:20px;height:20px;margin-top:5px" src="${ctx}/images/save.png"/>
+            			</i>刷新
+            		</button>
+            	</a>
+            	<span class="x-right" style="line-height:40px">共有数据：${userPage.totalRow} 条</span>
             </xblock>
             <table class="layui-table">
                 <thead >
@@ -189,10 +216,10 @@
 	          		<c:set var="lastPage" value="1"></c:set>
 	          	</c:if>
 			  <div align="center">
-				<a  class="page" style="margin-left:25px;" href="${ctx}/admin_user/findUserPage?accout=${param.accout}&&pageNumber=1&&pageSize=${userPage.pageSize}&&exist=1">首页</a>
-				<a  class="page" href="${ctx}/admin_user/findUserPage?accout=${param.accout}&&pageNumber=${prePage}&&pageSize=${userPage.pageSize}&&exist=1">上一页</a>
-				<a  class="page" href="${ctx}/admin_user/findUserPage?accout=${param.accout}&&pageNumber=${nextPage}&&pageSize=${userPage.pageSize}&&exist=1">下一页</a>
-				<a  class="page" href="${ctx}/admin_user/findUserPage?accout=${param.accout}&&pageNumber=${lastPage}&&pageSize=${userPage.pageSize}&&exist=1">末页</a>			
+				<a  class="page" style="margin-left:25px;" href="${ctx}/admin/user/findUserPage?accout=${param.accout}&&pageNumber=1&&pageSize=${userPage.pageSize}&&exist=1">首页</a>
+				<a  class="page" href="${ctx}/admin/user/findUserPage?accout=${param.accout}&&pageNumber=${prePage}&&pageSize=${userPage.pageSize}&&exist=1">上一页</a>
+				<a  class="page" href="${ctx}/admin/user/findUserPage?accout=${param.accout}&&pageNumber=${nextPage}&&pageSize=${userPage.pageSize}&&exist=1">下一页</a>
+				<a  class="page" href="${ctx}/admin/user/findUserPage?accout=${param.accout}&&pageNumber=${lastPage}&&pageSize=${userPage.pageSize}&&exist=1">末页</a>			
 			  </div>
 			  <div align="center" style="margin-top:20px;">
 				<span style="margin-right:10px;">

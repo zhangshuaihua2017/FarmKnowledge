@@ -16,4 +16,12 @@
 		<filter-name>jFinal</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+	<filter>
+		<filter-name>loginFilter</filter-name>
+		<filter-class>com.farm.config.LoginFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>loginFilter</filter-name>
+		<url-pattern>/admin/*</url-pattern>
+	</filter-mapping>
 </web-app>

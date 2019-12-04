@@ -19,13 +19,13 @@
                     </a>
                     <ul id="initUserManager" class="sub-menu">
                         <li id="initUserManager1">
-                            <a href="${ctx}/admin_user/findUserPage?exist=1">
+                            <a href="${ctx}/admin/user/findUserPage?exist=1">
                                 <i class="iconfont">&#xe6a7;</i>
                         	用户列表
                             </a>
                         </li>
                         <li id="initUserManager2">
-                            <a href="${ctx}/admin_user/findUserPage?exist=0">
+                            <a href="${ctx}/admin/user/findUserPage?exist=0">
                                 <i class="iconfont">&#xe6a7;</i>
                         	用户删除
                             </a>
@@ -40,13 +40,13 @@
                     </a>
                     <ul id="initCropManager" class="sub-menu">
                         <li id="initCropManager1">
-                            <a href="${ctx}/admin_crop/findCropPage?exist=1">
+                            <a href="${ctx}/admin/crop/findCropPage?exist=1">
                                 <i class="iconfont">&#xe6a7;</i>
                         	作物列表
                             </a>
                         </li>
                         <li id="initCropManager2">
-                            <a href="${ctx}/crop-del.jsp">
+                            <a href="${ctx}/admin/crop/findCropPage?exist=0">
                                 <i class="iconfont">&#xe6a7;</i>
                         	作物删除
                             </a>

@@ -8,8 +8,9 @@ import com.jfinal.config.Routes;
 public class AdminRoutes extends Routes {
     @Override
     public void config() {
-        add("admin",AdminController.class);
-        add("admin_user",UserController.class);
-        add("admin_crop",CropController.class);
+        add("/",AdminController.class);
+        add("/admin",AdminController.class);
+        add("/admin/user",UserController.class);
+        add("/admin/crop",CropController.class);
     }
 }

@@ -30,7 +30,7 @@
     		if(name == "" || price == "" || img1 == "" || img2 == "" || img3 == "" || matureTime == "" || value == "" || experience == ""){
     			layer.msg('输入框不能为空');
     		}else{
-	    		$.post("${ctx}/admin_crop/updateCrop",{"id":"${crop.id}","name":name,"price":price,"img1":img1,"img2":img2,"img3":img3,"matureTime":matureTime,"value":value,"experience":experience},function(data){
+	    		$.post("${ctx}/admin/crop/updateCrop",{"id":"${crop.id}","name":name,"price":price,"img1":img1,"img2":img2,"img3":img3,"matureTime":matureTime,"value":value,"experience":experience},function(data){
 	    			if(data == "succeed"){
 						x_admin_close();
 	    			}else if(data == "fail"){

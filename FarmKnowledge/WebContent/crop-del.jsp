@@ -22,6 +22,56 @@
 			$("#initCropManager").attr("class","sub-menu opened");
 			$("#initCropManager2").attr("class","current");
 		}
+		
+		//恢复单个作物信息
+        function recoveryOneCrop(id){
+            layer.confirm('确认要恢复吗？',function(index){
+            	$.post("${ctx}/admin_crop/recoveryOneCrop",{"id":id},function(data){
+	    			if(data == "succeed"){
+	    				window.location.href="${ctx}/admin_crop/findCropPage?exist=0";
+	    			}else if(data == "fail"){
+	    				layer.msg('恢复失败');
+	    			}
+	    		})    
+            });
+        }
+		
+        //恢复批量作物信息
+        function recoveryMultiCrop() {
+            var arrRecovery = document.getElementsByName("checkBox");
+            var recoveryStr="";
+		    for(i in arrRecovery){
+			   if(arrRecovery[i].checked){
+				   recoveryStr = recoveryStr + arrRecovery[i].value + ",";
+			   }
+		    }
+            layer.confirm('确认要批量恢复吗？',function(index){
+            	if(recoveryStr != ""){
+	        	    $.post("${ctx}/admin/crop/recoveryMultiCrop",{"recoveryStr":recoveryStr},function(data){
+			    	 	 if(data == "succeed"){
+			    			 window.location.href="${ctx}/admin/crop/findCropPage?exist=0";
+			    		 }else if(data == "fail"){
+			    			 layer.msg('恢复失败');
+			    		 }
+		    	    }) 
+            	}else{
+            		layer.msg('恢复不能为空');
+            	}
+            });
+         }
+        
+      	//彻底删除作物信息
+        function deleteThoroughCrop(id){
+            layer.confirm('彻底删除无法恢复，确认要删除数据吗？',function(index){
+            	$.post("${ctx}/admin/crop/deleteThoroughCrop",{"id":id},function(data){
+	    			if(data == "succeed"){
+	    				window.location.href="${ctx}/admin/crop/findCropPage?exist=0";
+	    			}else if(data == "fail"){
+	    				layer.msg('删除失败');
+	    			}
+	    		}) 
+            });
+        }   
     </script>
 
 </head>
@@ -38,7 +88,7 @@
         <div class="page-content">
           <div class="content">
             <!-- 右侧内容框架，更改从这里开始 -->
-            <form class="layui-form xbs" action="">
+            <form class="layui-form xbs" action="${ctx}/admin/crop/findCropPage">
                 <div class="layui-form-pane" style="text-align: center;">
                   <div class="layui-form-item" style="display: inline-block;">
                     <div class="layui-input-inline">
@@ -101,6 +151,58 @@
             </table>
             <!-- 右侧内容框架，更改从这里结束 -->
           </div>
+          <!-- 分页处理开始 -->
+          		<!-- 上一页 -->
+	          	<c:choose>
+	        		<c:when test="${cropPage.pageNumber-1 > 0}">
+	        			<c:set var="prePage" value="${cropPage.pageNumber-1}"></c:set>
+	        		</c:when>
+	        		<c:when test="${cropPage.pageNumber-1 <= 0}">
+	        			<c:set var="prePage" value="1"></c:set>
+	        		</c:when>
+	        	</c:choose>
+	        	<!-- 查询结果不为空 -->
+	          	<c:if test="${cropPage.totalPage != 0}">
+	          		<!-- 下一页 -->
+	          		<c:choose>
+	          			<c:when test="${cropPage.pageNumber+1 <= cropPage.totalPage}">
+	          				<c:set var="nextPage" value="${cropPage.pageNumber+1}"></c:set>
+	          			</c:when>
+	          			<c:when test="${cropPage.pageNumber+1 > cropPage.totalPage}">
+	          				<c:set var="nextPage" value="${cropPage.totalPage}"></c:set>
+	          			</c:when>
+	          		</c:choose>
+	          		<!-- 末页 -->
+	          		<c:set var="lastPage" value="${cropPage.totalPage}"></c:set>
+	          	</c:if>
+	          	<!-- 查询结果为空 -->
+	          	<c:if test="${cropPage.totalPage == 0}">
+	          		<!-- 下一页 -->
+	          		<c:set var="nextPage" value="1"></c:set>
+	          		<!-- 末页 -->
+	          		<c:set var="lastPage" value="1"></c:set>
+	          	</c:if>
+			  <div align="center">
+				<a  class="page" style="margin-left:25px;" href="${ctx}/admin/crop/findCropPage?name=${param.name}&&pageNumber=1&&pageSize=${cropPage.pageSize}&&exist=0">首页</a>
+				<a  class="page" href="${ctx}/admin/crop/findCropPage?name=${param.name}&&pageNumber=${prePage}&&pageSize=${cropPage.pageSize}&&exist=0">上一页</a>
+				<a  class="page" href="${ctx}/admin/crop/findCropPage?name=${param.name}&&pageNumber=${nextPage}&&pageSize=${cropPage.pageSize}&&exist=0">下一页</a>
+				<a  class="page" href="${ctx}/admin/crop/findCropPage?name=${param.name}&&pageNumber=${lastPage}&&pageSize=${cropPage.pageSize}&&exist=0">末页</a>			
+			  </div>
+			  <div align="center" style="margin-top:20px;">
+				<span style="margin-right:10px;">
+					<!-- 查询结果不为空 -->
+					<c:if test="${cropPage.totalPage != 0}">
+						${cropPage.pageNumber}
+					</c:if>
+					<!-- 查询结果为空 -->
+					<c:if test="${cropPage.totalPage == 0}">
+						0
+					</c:if>
+				</span>
+				<span>/</span>
+				<span style="margin-left:10px;">${cropPage.totalPage}</span>
+			  </div>
+		  <!-- 分页处理结束 -->
         </div>
         <!-- 右侧主体结束 -->
     </div>

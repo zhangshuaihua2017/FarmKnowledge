@@ -28,6 +28,61 @@
 			$("#initCropManager").attr("class","sub-menu opened");
 			$("#initCropManager1").attr("class","current");
 		}
+		
+		//删除单个作物信息
+		function deleteOneCrop(id){
+			layer.confirm('确认要删除吗？',function(index){
+				$.post("${ctx}/admin/crop/deleteOneCrop",{"id":id},function(data){
+	    			if(data == "succeed"){
+	    				window.location.href="${ctx}/admin/crop/findCropPage?exist=1";
+	    			}else if(data == "fail"){
+	    				layer.msg('删除失败');
+	    			}
+	    		})                
+            });   
+        }
+		
+		//删除批量作物信息
+        function deleteMultiCrop() {
+        	var arrDelete = document.getElementsByName("checkBox");
+        	var deleteStr="";
+			for(i in arrDelete){
+				if(arrDelete[i].checked){
+					deleteStr = deleteStr + arrDelete[i].value + ",";
+				}
+			}
+            layer.confirm('确认要批量删除吗？',function(index){
+            	if(deleteStr != ""){
+	        	    $.post("${ctx}/admin/crop/deleteMultiCrop",{"deleteStr":deleteStr},function(data){
+		    			if(data == "succeed"){
+		    				window.location.href="${ctx}/admin/crop/findCropPage?exist=1";
+		    			}else if(data == "fail"){
+		    				layer.msg('删除失败');
+		    			}
+		    		}) 
+            	}else{
+            		layer.msg('删除不能为空');
+            	}
+            });
+        }
+		
+        //添加作物信息
+        function addCrop(title,url,w,h){
+            x_admin_show(title,url,w,h);
+        }
+        
+		 //根据作物id获取到要修改的作物信息
+		 function getUpdateCropInfo(id,path){
+			 $.post("${ctx}/admin/crop/getUpdateCropInfo",{"id":id},function(data){
+			 	updateCrop('编辑',path,'600','400');
+	    	 }) 
+		 }
+        
+     	//修改作物信息
+        function updateCrop (title,url,w,h) {
+            x_admin_show(title,url,w,h); 
+        }
+
     </script>
 
 </head>
@@ -44,7 +99,7 @@
         <div class="page-content">
           <div class="content">
             <!-- 右侧内容框架，更改从这里开始 -->
-            <form class="layui-form xbs" action="${ctx}/admin_crop/findCropPage">
+            <form class="layui-form xbs" action="${ctx}/admin/crop/findCropPage">
                 <div class="layui-form-pane" style="text-align: center;">
                   <div class="layui-form-item" style="display: inline-block;">
                     <div class="layui-input-inline">
@@ -64,6 +119,13 @@
 	            <button class="layui-btn" onclick="member_add('添加用户','member-add.html','600','500')">
 	            	<i class="layui-icon">&#xe608;</i>添加
 	            </button>
+	            <a href="${ctx}/admin/crop/findCropPage?accout=${param.name}&&pageNumber=${cropPage.pageNumber}&&pageSize=${cropPage.pageSize}&&exist=1">
+            		<button class="layui-btn" style="margin-left:11px;">
+            			<i class="layui-icon">
+            				<img style="width:20px;height:20px;margin-top:5px" src="${ctx}/images/save.png"/>
+            			</i>刷新
+            		</button>
+            	</a>
 	            <span class="x-right" style="line-height:40px">共有数据：${cropPage.totalRow} 条</span>
             </xblock>
             <table class="layui-table">
@@ -145,10 +207,10 @@
 	          		<c:set var="lastPage" value="1"></c:set>
 	          	</c:if>
 			  <div align="center">
-				<a  class="page" style="margin-left:25px;" href="${ctx}/admin_crop/findCropPage?name=${param.name}&&pageNumber=1&&pageSize=${cropPage.pageSize}&&exist=1">首页</a>
-				<a  class="page" href="${ctx}/admin_crop/findCropPage?name=${param.name}&&pageNumber=${prePage}&&pageSize=${cropPage.pageSize}&&exist=1">上一页</a>
-				<a  class="page" href="${ctx}/admin_crop/findCropPage?name=${param.name}&&pageNumber=${nextPage}&&pageSize=${cropPage.pageSize}&&exist=1">下一页</a>
-				<a  class="page" href="${ctx}/admin_crop/findCropPage?name=${param.name}&&pageNumber=${lastPage}&&pageSize=${cropPage.pageSize}&&exist=1">末页</a>			
+				<a  class="page" style="margin-left:25px;" href="${ctx}/admin/crop/findCropPage?name=${param.name}&&pageNumber=1&&pageSize=${cropPage.pageSize}&&exist=1">首页</a>
+				<a  class="page" href="${ctx}/admin/crop/findCropPage?name=${param.name}&&pageNumber=${prePage}&&pageSize=${cropPage.pageSize}&&exist=1">上一页</a>
+				<a  class="page" href="${ctx}/admin/crop/findCropPage?name=${param.name}&&pageNumber=${nextPage}&&pageSize=${cropPage.pageSize}&&exist=1">下一页</a>
+				<a  class="page" href="${ctx}/admin/crop/findCropPage?name=${param.name}&&pageNumber=${lastPage}&&pageSize=${cropPage.pageSize}&&exist=1">末页</a>			
 			  </div>
 			  <div align="center" style="margin-top:20px;">
 				<span style="margin-right:10px;">

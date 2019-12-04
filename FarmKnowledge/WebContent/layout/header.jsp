@@ -8,7 +8,7 @@
           <li class="layui-nav-item">
             <a href="javascript:;">${admin.accout}</a>
             <dl class="layui-nav-child">
-              <dd><a href="${ctx}/login.jsp">退出</a></dd>
+              <dd><a href="${ctx}/admin/registAdmin">退出</a></dd>
             </dl>
           </li>
           <li class="layui-nav-item"><a href="/"></a></li>

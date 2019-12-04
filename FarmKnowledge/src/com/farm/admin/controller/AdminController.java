@@ -7,6 +7,17 @@ import com.jfinal.plugin.activerecord.Page;
 
 public class AdminController extends Controller{
 	
+	//跳转到登录页面
+	public void index() {
+		renderJsp("/login.jsp");
+	}
+	
+	//注销
+	public void registAdmin() {
+		removeSessionAttr("admin");
+		renderJsp("/login.jsp");
+	}
+	
 	//跳转到主页面
 	public void gotoIndex() {
 		renderJsp("/index.jsp");
